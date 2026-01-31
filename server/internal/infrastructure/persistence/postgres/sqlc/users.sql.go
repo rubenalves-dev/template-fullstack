@@ -8,7 +8,7 @@ package sqlc
 import (
 	"context"
 
-	uuid_uuid "github.com/google/uuid.UUID"
+	uuid_uuid "github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 

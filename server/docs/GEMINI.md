@@ -1,4 +1,4 @@
-# Beheer: Go Fullstack Template
+# Template Fullstack: Go Fullstack Template
 
 **Tech Stack:** Go (Golang), PostgreSQL, SQLC, Goose.
 

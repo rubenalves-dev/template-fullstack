@@ -10,14 +10,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/rubenalves-dev/beheer/internal/config"
-	"github.com/rubenalves-dev/beheer/internal/db"
-	"github.com/rubenalves-dev/beheer/internal/auth"
-	"github.com/rubenalves-dev/beheer/internal/membership"
-	"github.com/rubenalves-dev/beheer/internal/modality"
-	"github.com/rubenalves-dev/beheer/internal/billing"
-	"github.com/rubenalves-dev/beheer/internal/enrollment"
-	httpPort "github.com/rubenalves-dev/beheer/internal/ports/http"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/rubenalves-dev/template-fullstack/server/internal/applications/auth"
+	"github.com/rubenalves-dev/template-fullstack/server/internal/config"
+	"github.com/rubenalves-dev/template-fullstack/server/internal/infrastructure/persistence/postgres/repositories"
+	httpPort "github.com/rubenalves-dev/template-fullstack/server/internal/ports/http"
 )
 
 func main() {
@@ -34,7 +31,7 @@ func main() {
 	logger.Info("starting application", "env", cfg.Env, "port", cfg.Port)
 
 	// 3. Database Connection
-	pool, err := db.NewPool(context.Background(), cfg.DBConnString)
+	pool, err := pgxpool.New(context.Background(), cfg.DBConnString)
 	if err != nil {
 		logger.Error("failed to connect to database", "error", err)
 		os.Exit(1)
@@ -43,25 +40,11 @@ func main() {
 	logger.Info("connected to database")
 
 	// 4. Repositories & Services
-	queries := db.New(pool)
-	
-	authRepo := auth.NewRepository(pool)
+	authRepo := repositories.NewUserRepository(pool)
 	authSvc := auth.NewService(authRepo, cfg.JWTSecret)
 
-	memberRepo := membership.NewRepository(queries)
-	memberSvc := membership.NewService(memberRepo)
-
-	modalityRepo := modality.NewRepository(queries)
-	modalitySvc := modality.NewService(modalityRepo)
-
-	billingRepo := billing.NewRepository(queries)
-	billingSvc := billing.NewService(billingRepo)
-
-	enrollmentRepo := enrollment.NewRepository(queries)
-	enrollmentSvc := enrollment.NewService(enrollmentRepo, modalitySvc, billingSvc)
-
 	// 5. Setup Router
-	r := httpPort.NewRouter(cfg, authSvc, memberSvc, modalitySvc, billingSvc, enrollmentSvc)
+	r := httpPort.NewRouter(cfg, authSvc)
 
 	// 6. Start Server
 	server := &http.Server{

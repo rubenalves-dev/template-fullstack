@@ -1,20 +1,17 @@
 package http
 
 import (
+	"net/http"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/rs/cors"
-	"github.com/rubenalves-dev/beheer/internal/auth"
-	"github.com/rubenalves-dev/beheer/internal/membership"
-	"github.com/rubenalves-dev/beheer/internal/modality"
-	"github.com/rubenalves-dev/beheer/internal/billing"
-	"github.com/rubenalves-dev/beheer/internal/enrollment"
-	"github.com/rubenalves-dev/beheer/internal/config"
-	"github.com/rubenalves-dev/beheer/internal/domain"
-	"net/http"
+	"github.com/rubenalves-dev/template-fullstack/server/internal/applications/auth"
+	"github.com/rubenalves-dev/template-fullstack/server/internal/config"
+	"github.com/rubenalves-dev/template-fullstack/server/pkg/jsonutil"
 )
 
-func NewRouter(cfg *config.Config, authSvc auth.Service, memberSvc membership.Service, modalitySvc modality.Service, billingSvc billing.Service, enrollmentSvc enrollment.Service) http.Handler {
+func NewRouter(cfg *config.Config, authSvc auth.Service) http.Handler {
 	r := chi.NewRouter()
 
 	// Standard Middleware
@@ -35,7 +32,7 @@ func NewRouter(cfg *config.Config, authSvc auth.Service, memberSvc membership.Se
 	r.Use(c.Handler)
 
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
-		domain.RenderJSON(w, http.StatusOK, map[string]string{"status": "OK"})
+		jsonutil.RenderJSON(w, http.StatusOK, map[string]string{"status": "OK"})
 	})
 
 	// Auth
@@ -47,58 +44,60 @@ func NewRouter(cfg *config.Config, authSvc auth.Service, memberSvc membership.Se
 	r.Group(func(r chi.Router) {
 		r.Use(AuthMiddleware(cfg.JWTSecret))
 
-		// Membership
-		memberHandler := NewMembershipHandler(memberSvc)
-		r.Route("/api/v1/members", func(r chi.Router) {
-			r.Post("/", memberHandler.Create)
-			r.Get("/", memberHandler.List)
-			r.Route("/{id}", func(r chi.Router) {
-				r.Get("/", memberHandler.Get)
-				r.Put("/", memberHandler.Update)
-				r.Delete("/", memberHandler.Archive)
-				r.Get("/profile", memberHandler.GetFullProfile)
-			})
-		})
-
-		// Modalities & Seasons
-		modalityHandler := NewModalityHandler(modalitySvc)
-		r.Route("/api/v1/modalities", func(r chi.Router) {
-			r.Post("/", modalityHandler.CreateModality)
-			r.Get("/", modalityHandler.ListModalities)
-			r.Get("/{modalityID}/weight-categories", modalityHandler.ListWeightCategories)
-			r.Post("/weight-categories", modalityHandler.CreateWeightCategory)
-		})
-		r.Route("/api/v1/seasons", func(r chi.Router) {
-			r.Post("/", modalityHandler.CreateSeason)
-			r.Get("/", modalityHandler.ListSeasons)
-			r.Get("/{seasonID}/prices", modalityHandler.ListPrices)
-			r.Post("/prices", modalityHandler.CreatePrice)
-		})
-
-		// Billing
-		billingHandler := NewBillingHandler(billingSvc)
-		r.Route("/api/v1/billing", func(r chi.Router) {
-			r.Route("/invoices", func(r chi.Router) {
-				r.Post("/", billingHandler.CreateInvoice)
-				r.Get("/", billingHandler.ListInvoices)
+		/*
+			// Membership
+			memberHandler := NewMembershipHandler(memberSvc)
+			r.Route("/api/v1/members", func(r chi.Router) {
+				r.Post("/", memberHandler.Create)
+				r.Get("/", memberHandler.List)
 				r.Route("/{id}", func(r chi.Router) {
-					r.Get("/", billingHandler.GetInvoice)
-					r.Post("/pay", billingHandler.MarkAsPaid)
+					r.Get("/", memberHandler.Get)
+					r.Put("/", memberHandler.Update)
+					r.Delete("/", memberHandler.Archive)
+					r.Get("/profile", memberHandler.GetFullProfile)
 				})
 			})
-			r.Route("/subscriptions", func(r chi.Router) {
-				r.Post("/", billingHandler.CreateSubscription)
-				r.Get("/member/{memberID}", billingHandler.ListSubscriptions)
-			})
-		})
 
-		// Enrollment
-		enrollmentHandler := NewEnrollmentHandler(enrollmentSvc)
-		r.Route("/api/v1/enrollments", func(r chi.Router) {
-			r.Post("/", enrollmentHandler.Enroll)
-			r.Get("/member/{memberID}", enrollmentHandler.ListByMember)
-			r.Post("/{id}/approve", enrollmentHandler.Approve)
-		})
+			// Modalities & Seasons
+			modalityHandler := NewModalityHandler(modalitySvc)
+			r.Route("/api/v1/modalities", func(r chi.Router) {
+				r.Post("/", modalityHandler.CreateModality)
+				r.Get("/", modalityHandler.ListModalities)
+				r.Get("/{modalityID}/weight-categories", modalityHandler.ListWeightCategories)
+				r.Post("/weight-categories", modalityHandler.CreateWeightCategory)
+			})
+			r.Route("/api/v1/seasons", func(r chi.Router) {
+				r.Post("/", modalityHandler.CreateSeason)
+				r.Get("/", modalityHandler.ListSeasons)
+				r.Get("/{seasonID}/prices", modalityHandler.ListPrices)
+				r.Post("/prices", modalityHandler.CreatePrice)
+			})
+
+			// Billing
+			billingHandler := NewBillingHandler(billingSvc)
+			r.Route("/api/v1/billing", func(r chi.Router) {
+				r.Route("/invoices", func(r chi.Router) {
+					r.Post("/", billingHandler.CreateInvoice)
+					r.Get("/", billingHandler.ListInvoices)
+					r.Route("/{id}", func(r chi.Router) {
+						r.Get("/", billingHandler.GetInvoice)
+						r.Post("/pay", billingHandler.MarkAsPaid)
+					})
+				})
+				r.Route("/subscriptions", func(r chi.Router) {
+					r.Post("/", billingHandler.CreateSubscription)
+					r.Get("/member/{memberID}", billingHandler.ListSubscriptions)
+				})
+			})
+
+			// Enrollment
+			enrollmentHandler := NewEnrollmentHandler(enrollmentSvc)
+			r.Route("/api/v1/enrollments", func(r chi.Router) {
+				r.Post("/", enrollmentHandler.Enroll)
+				r.Get("/member/{memberID}", enrollmentHandler.ListByMember)
+				r.Post("/{id}/approve", enrollmentHandler.Approve)
+			})
+		*/
 	})
 
 	return r

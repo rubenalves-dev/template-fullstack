@@ -16,4 +16,8 @@ type User struct {
 	UpdatedAt   time.Time
 	ActivatedAt time.Time
 	ArchivedAt  time.Time
+
+	// Contextual fields
+	OrganizationID uuid.UUID
+	Role           string
 }

@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/rubenalves-dev/beheer/internal/auth"
-	"github.com/rubenalves-dev/beheer/internal/domain"
+	"github.com/rubenalves-dev/template-fullstack/server/internal/applications/auth"
+	"github.com/rubenalves-dev/template-fullstack/server/internal/domain/common"
+	"github.com/rubenalves-dev/template-fullstack/server/pkg/jsonutil"
 )
 
 type AuthHandler struct {
@@ -35,24 +36,24 @@ type RegisterRequest struct {
 func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	var req LoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		domain.RenderError(w, http.StatusBadRequest, "INVALID_REQUEST", "Failed to parse request body")
+		jsonutil.RenderError(w, http.StatusBadRequest, "INVALID_REQUEST", "Failed to parse request body")
 		return
 	}
 
 	token, err := h.svc.Login(r.Context(), req.Email, req.Password)
 	if err != nil {
-		status, code := domain.MapError(err)
-		domain.RenderError(w, status, code, err.Error())
+		status, code := common.MapError(err)
+		jsonutil.RenderError(w, status, code, err.Error())
 		return
 	}
 
-	domain.RenderJSON(w, http.StatusOK, LoginResponse{Token: token})
+	jsonutil.RenderJSON(w, http.StatusOK, LoginResponse{Token: token})
 }
 
 func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	var req RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		domain.RenderError(w, http.StatusBadRequest, "INVALID_REQUEST", "Failed to parse request body")
+		jsonutil.RenderError(w, http.StatusBadRequest, "INVALID_REQUEST", "Failed to parse request body")
 		return
 	}
 
@@ -63,10 +64,10 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		OrganizationName: req.OrganizationName,
 	})
 	if err != nil {
-		status, code := domain.MapError(err)
-		domain.RenderError(w, status, code, err.Error())
+		status, code := common.MapError(err)
+		jsonutil.RenderError(w, status, code, err.Error())
 		return
 	}
 
-	domain.RenderJSON(w, http.StatusCreated, map[string]string{"message": "User registered successfully"})
+	jsonutil.RenderJSON(w, http.StatusCreated, map[string]string{"message": "User registered successfully"})
 }

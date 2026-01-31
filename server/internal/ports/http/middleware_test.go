@@ -8,7 +8,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/rubenalves-dev/beheer/internal/domain"
+	"github.com/rubenalves-dev/template-fullstack/server/internal/domain/iam/auth"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,7 +17,7 @@ func TestAuthMiddleware(t *testing.T) {
 	middleware := AuthMiddleware(secret)
 
 	nextHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		claims, ok := r.Context().Value(domain.UserClaimsKey).(*domain.UserClaims)
+		claims, ok := r.Context().Value(auth.UserClaimsKey).(*auth.UserClaims)
 		if ok {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(claims.UserID))
@@ -29,7 +29,7 @@ func TestAuthMiddleware(t *testing.T) {
 	t.Run("valid token", func(t *testing.T) {
 		userID := uuid.New().String()
 		orgID := uuid.New().String()
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, domain.UserClaims{
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, auth.UserClaims{
 			UserID:         userID,
 			OrganizationID: orgID,
 			RegisteredClaims: jwt.RegisteredClaims{

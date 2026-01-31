@@ -1,15 +1,13 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:15-alpine
-    container_name: beheer_db
+    container_name: template-fullstack_db
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_NAME:-beheer}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${DB_NAME:-template-fullstack}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
