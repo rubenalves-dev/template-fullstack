@@ -16,6 +16,8 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/rs/cors"
 	"github.com/rubenalves-dev/template-fullstack/server/internal/auth"
+	authHttp "github.com/rubenalves-dev/template-fullstack/server/internal/auth/delivery/http"
+	"github.com/rubenalves-dev/template-fullstack/server/internal/cms"
 	"github.com/rubenalves-dev/template-fullstack/server/internal/platform"
 	"github.com/rubenalves-dev/template-fullstack/server/pkg/jsonutil"
 )
@@ -67,9 +69,19 @@ func main() {
 		jsonutil.RenderJSON(w, http.StatusOK, map[string]string{"status": "OK"})
 	})
 
-	// Microservices
+	// Auth Module
 	authModule := auth.NewModule(dbPool, nc, cfg.JWTSecret)
 	authModule.RegisterRoutes(router)
+
+	// Microservices
+	cmsModule := cms.NewModule(dbPool, nc)
+
+	// Protected routes modules
+	router.Group(func(r chi.Router) {
+		r.Use(authHttp.AuthMiddleware(cfg.JWTSecret))
+
+		cmsModule.RegisterRoutes(r)
+	})
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%d", cfg.Port),

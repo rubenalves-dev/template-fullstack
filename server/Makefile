@@ -33,7 +33,7 @@ migration-down:
 	goose -dir migrations postgres "$(DB_CONN_STRING)" down
 
 migration-create:
-	goose -dir migrations postgres "$(DB_CONN_STRING)" create $(name) sql
+	goose -dir migrations postgres "$(DB_CONN_STRING)" create -s $(name) sql
 
 db-create:
 	go run scripts/db_manager.go create
