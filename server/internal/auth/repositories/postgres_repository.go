@@ -2,10 +2,13 @@ package repositories
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rubenalves-dev/template-fullstack/server/internal/auth/domain"
+	"github.com/rubenalves-dev/template-fullstack/server/pkg/httputil"
 )
 
 type pgxRepo struct {
@@ -17,11 +20,14 @@ func NewPgxRepository(pool *pgxpool.Pool) domain.Repository {
 }
 
 func (r *pgxRepo) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
-	query := `SELECT id, email, full_name FROM users WHERE email = $1`
+	query := `SELECT id, email, password_hash, full_name FROM users WHERE email = $1`
 
 	var user domain.User
-	err := r.pool.QueryRow(ctx, query, email).Scan(&user.ID, &user.Email, &user.FullName)
+	err := r.pool.QueryRow(ctx, query, email).Scan(&user.ID, &user.Email, &user.PasswordHash, &user.FullName)
 	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, httputil.ErrNotFound
+		}
 		return nil, fmt.Errorf("auth repo get user by email: %w", err)
 	}
 
