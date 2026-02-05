@@ -23,7 +23,7 @@ func (p pxgRepo) GetByID(ctx context.Context, id uuid.UUID) (*domain.Page, error
 	row := p.pool.QueryRow(ctx, query, id)
 
 	var page domain.Page
-	err := row.Scan(&page.ID, &page.Title, &page.Slug, &page.SEODescription, &page.SEOKeywords, &page.Status, &page.UpdatedAt)
+	err := row.Scan(&page.ID, &page.Title, &page.Slug, &page.SEODescription, &page.SEOKeywords, &page.Status, &page.CreatedAt, &page.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func (p pxgRepo) GetBySlug(ctx context.Context, slug string) (*domain.Page, erro
 	row := p.pool.QueryRow(ctx, query, slug)
 
 	var page domain.Page
-	err := row.Scan(&page.ID, &page.Title, &page.Slug, &page.SEODescription, &page.SEOKeywords, &page.Status, &page.UpdatedAt)
+	err := row.Scan(&page.ID, &page.Title, &page.Slug, &page.SEODescription, &page.SEOKeywords, &page.Status, &page.CreatedAt, &page.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (p pxgRepo) List(ctx context.Context) ([]domain.Page, error) {
 	var pages []domain.Page
 	for rows.Next() {
 		var page domain.Page
-		err := rows.Scan(&page.ID, &page.Title, &page.Slug, &page.SEODescription, &page.SEOKeywords, &page.Status, &page.UpdatedAt)
+		err := rows.Scan(&page.ID, &page.Title, &page.Slug, &page.SEODescription, &page.SEOKeywords, &page.Status, &page.CreatedAt, &page.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}

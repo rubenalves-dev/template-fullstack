@@ -1,6 +1,10 @@
 package domain
 
-import "github.com/google/uuid"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Page struct {
 	ID             uuid.UUID `json:"id"`
@@ -9,7 +13,8 @@ type Page struct {
 	SEODescription string    `json:"seo_description"`
 	SEOKeywords    []string  `json:"seo_keywords"`
 	Status         string    `json:"status"`
-	UpdatedAt      string    `json:"updated_at"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
 
 	Rows []Row `json:"rows,omitempty"`
 }

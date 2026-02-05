@@ -43,7 +43,7 @@ func (a authService) Login(ctx context.Context, email, password string) (string,
 	claims := domain.UserClaims{
 		UserID: u.ID.String(),
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now()),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24 * 7)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			Subject:   u.ID.String(),
 		},

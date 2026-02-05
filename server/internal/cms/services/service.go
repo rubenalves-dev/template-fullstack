@@ -45,8 +45,14 @@ func (s service) PublishPage(ctx context.Context, id uuid.UUID) error {
 		return err
 	}
 
-	eventData, _ := json.Marshal(page)
-	return s.nc.Publish("cms.page.published", eventData)
+	event := domain.PagePublishedEvent{
+		PageID: page.ID,
+		Title:  page.Title,
+		Slug:   page.Slug,
+	}
+	eventBytes, _ := json.Marshal(event)
+
+	return s.nc.Publish(domain.EventPagePublished, eventBytes)
 }
 
 func (s service) ArchivePage(ctx context.Context, id uuid.UUID) error {
