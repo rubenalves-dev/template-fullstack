@@ -130,7 +130,7 @@ func (p pxgRepo) SaveLayout(ctx context.Context, pageID uuid.UUID, rows []domain
 
 func (p pxgRepo) GetFullLayout(ctx context.Context, pageID uuid.UUID) ([]domain.Row, error) {
 	// 1. Get Rows
-	rowsQuery := `SELECT id, page_id, order_index, css_class, background_config FROM rows WHERE page_id = $1 ORDER BY order_index ASC`
+	rowsQuery := `SELECT id, page_id, order_index, css_class, background_config FROM "rows" WHERE page_id = $1 ORDER BY order_index`
 	dbRows, err := p.pool.Query(ctx, rowsQuery, pageID)
 	if err != nil {
 		return nil, err
@@ -158,7 +158,7 @@ func (p pxgRepo) GetFullLayout(ctx context.Context, pageID uuid.UUID) ([]domain.
 	}
 
 	// 2. Get Columns
-	colsQuery := `SELECT id, row_id, order_index, css_class, width_sm, width_md, width_lg, width_xl FROM columns WHERE row_id = ANY($1) ORDER BY order_index ASC`
+	colsQuery := `SELECT id, row_id, order_index, css_class, width_sm, width_md, width_lg, width_xl FROM columns WHERE row_id = ANY($1) ORDER BY order_index`
 	dbCols, err := p.pool.Query(ctx, colsQuery, rowIDs)
 	if err != nil {
 		return nil, err
@@ -188,7 +188,7 @@ func (p pxgRepo) GetFullLayout(ctx context.Context, pageID uuid.UUID) ([]domain.
 	}
 
 	// 3. Get Blocks
-	blocksQuery := `SELECT id, column_id, type, order_index, is_hidden, content FROM blocks WHERE column_id = ANY($1) ORDER BY order_index ASC`
+	blocksQuery := `SELECT id, column_id, type, order_index, is_hidden, content FROM blocks WHERE column_id = ANY($1) ORDER BY order_index`
 	dbBlocks, err := p.pool.Query(ctx, blocksQuery, colIDs)
 	if err != nil {
 		return nil, err
