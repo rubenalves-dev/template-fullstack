@@ -23,6 +23,7 @@ go.work
 # Binary output
 bin/
 temp/
+tmp/
 
 # Backup files
 _bk/
