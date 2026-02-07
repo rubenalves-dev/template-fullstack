@@ -11,6 +11,13 @@
 | `full_name` | `VARCHAR`   | User full name.                     |
 | `password_hash` | `VARCHAR` | Hashed password.                  |
 
+### Roles & Permissions (RBAC)
+
+- **Roles**: Defined user roles (e.g., `Admin`, `Staff`).
+- **Permissions**: Granular actions (e.g., `cms.page.write`). Modules register their permissions via EDA.
+- **Role Permissions**: Mapping between roles and permissions.
+- **User Roles**: Mapping between users and roles.
+
 ### Pages (CMS Content)
 
 | Column | Type | Description |
@@ -32,6 +39,11 @@
 
 ```mermaid
 erDiagram
+    User ||--o{ UserRole : "has"
+    Role ||--o{ UserRole : "assigned to"
+    Role ||--o{ RolePermission : "has"
+    Permission ||--o{ RolePermission : "assigned to"
+    
     User ||--o{ Page : "manages"
     Page ||--o{ Row : "contains"
     Row ||--o{ Column : "contains"
@@ -42,6 +54,27 @@ erDiagram
         string email
         string full_name
         string password_hash
+    }
+
+    Role {
+        int id PK
+        string name
+    }
+
+    Permission {
+        string id PK
+        string module
+        string description
+    }
+
+    UserRole {
+        uuid user_id FK
+        int role_id FK
+    }
+
+    RolePermission {
+        int role_id FK
+        string permission_id FK
     }
 
     Page {

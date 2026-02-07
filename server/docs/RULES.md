@@ -35,3 +35,10 @@ This document serves as the **Single Source of Truth** for:
     - **Event Listeners:** `internal/<module>/delivery/events/`.
 - **Platform:** `internal/platform/`. Shared infrastructure (DB, NATS, Router, Config).
 
+## 3. Documentation & Tooling
+
+### 3.1 Postman Collection Maintenance
+- **Rule:** Every time a new HTTP endpoint is created or an existing one is modified, it MUST be synchronized with `docs/api/postman_collection.json`.
+- **Mandate:** The collection item must include the correct Method, URL, Request Body (if applicable), and expected Response structure.
+- **Reasoning:** Ensures that the API documentation is always executable and up-to-date for frontend developers and external testing.
+
