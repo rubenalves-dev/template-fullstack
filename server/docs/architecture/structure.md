@@ -42,6 +42,8 @@ We adhere to the [Standard Go Project Layout](https://github.com/golang-standard
     - **Repositories:** Data access implementation.
     - **Delivery:** External interfaces (HTTP handlers and NATS event listeners).
 4.  **Event-Driven Communication:** Modules communicate asynchronously using NATS. Services publish events (e.g., `cms.page.published`) that other modules can subscribe to.
+    - **Permission Registration:** Each module is responsible for its own permissions. Upon startup, it should publish a `system.permissions.register` event with its permissions. The `auth` module listens to this event to populate the central permissions table.
+    - **Menu Registration:** Each module publishes a `system.menus.register` event with its backoffice menu definitions. The `auth` module aggregates and filters these menus per user.
 5.  **Platform Layer:** Cross-cutting concerns like database connections, NATS, and configuration reside in `internal/platform`.
 6.  **Interface-First:** High-level components depend on interfaces defined in the Domain layer, not on concrete implementations.
 7.  **Separation of Concerns:** HTTP handlers manage request/response, services manage logic, and repositories manage data.
