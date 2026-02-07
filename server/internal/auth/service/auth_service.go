@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -64,4 +65,63 @@ func (a authService) Register(ctx context.Context, user domain.User) error {
 
 	user.PasswordHash = string(hashedPassword)
 	return a.repo.CreateUser(ctx, &user)
+}
+
+func (a authService) RegisterModulePermissions(ctx context.Context, module string, permissions []string) error {
+	var perms []domain.Permission
+	for _, p := range permissions {
+		perms = append(perms, domain.Permission{
+			ID:     p,
+			Module: module,
+		})
+	}
+	return a.repo.UpsertPermissions(ctx, perms)
+}
+
+func (a authService) RegisterModuleMenus(ctx context.Context, domainName string, defs []domain.MenuDefinition) error {
+	for i := range defs {
+		defs[i].Domain = domainName
+	}
+	err := a.repo.UpsertMenuDefinitions(ctx, defs)
+	if err != nil {
+		slog.Error("failed to register module menus", "domain", domainName, "error", err)
+		return err
+	}
+	slog.Info("module menus registered", "domain", domainName, "count", len(defs))
+	return nil
+}
+
+func (a authService) CreateRole(ctx context.Context, name string) (*domain.Role, error) {
+	return a.repo.CreateRole(ctx, name)
+}
+
+func (a authService) GetRoles(ctx context.Context) ([]domain.Role, error) {
+	return a.repo.GetRoles(ctx)
+}
+
+func (a authService) AssignRole(ctx context.Context, userID uuid.UUID, roleID int) error {
+	return a.repo.AssignRoleToUser(ctx, userID, roleID)
+}
+
+func (a authService) AddPermissionToRole(ctx context.Context, roleID int, permissionID string) error {
+	return a.repo.AddPermissionToRole(ctx, roleID, permissionID)
+}
+
+func (a authService) GetMyMenu(ctx context.Context, userID uuid.UUID) ([]domain.MenuNode, error) {
+	perms, err := a.repo.GetUserPermissions(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	permMap := make(map[string]bool)
+	for _, p := range perms {
+		permMap[p] = true
+	}
+
+	defs, err := a.repo.GetMenuDefinitions(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return buildMenuTree(defs, permMap), nil
 }
