@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "template-fullstack-api-collection",
     "name": "Template Fullstack API",
-    "description": "Collection for Auth and CMS APIs",
+    "description": "Collection for Auth, Backoffice and CMS APIs",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -17,8 +17,8 @@
               "script": {
                 "exec": [
                   "var jsonData = pm.response.json();",
-                  "if (jsonData.token) {",
-                  "    pm.environment.set(\"token\", jsonData.token);",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.environment.set(\"token\", jsonData.data.token);",
                   "}"
                 ],
                 "type": "text/javascript"
@@ -63,6 +63,108 @@
               "raw": "{{baseUrl}}/auth/register",
               "host": ["{{baseUrl}}"],
               "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Backoffice",
+      "item": [
+        {
+          "name": "Get My Menu",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/backoffice/me/menu",
+              "host": ["{{baseUrl}}"],
+              "path": ["backoffice", "me", "menu"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Roles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/backoffice/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["backoffice", "roles"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Editor\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/backoffice/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["backoffice", "roles"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Permission to Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"permission_id\": \"cms.page.read\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/backoffice/roles/{{roleId}}/permissions",
+              "host": ["{{baseUrl}}"],
+              "path": ["backoffice", "roles", "{{roleId}}", "permissions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Assign Role to User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"role_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/backoffice/users/{{userId}}/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["backoffice", "users", "{{userId}}", "roles"]
             }
           },
           "response": []
@@ -163,6 +265,19 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Archive Page",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pages/{{pageId}}/archive",
+              "host": ["{{baseUrl}}"],
+              "path": ["pages", "{{pageId}}", "archive"]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -204,6 +319,16 @@
     {
       "key": "pageId",
       "value": "PAGE_UUID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "roleId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "USER_UUID_HERE",
       "type": "string"
     }
   ]

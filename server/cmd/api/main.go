@@ -80,6 +80,7 @@ func main() {
 	router.Group(func(r chi.Router) {
 		r.Use(authHttp.AuthMiddleware(cfg.JWTSecret))
 
+		authModule.RegisterProtectedRoutes(r)
 		cmsModule.RegisterRoutes(r)
 	})
 

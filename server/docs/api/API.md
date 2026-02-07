@@ -73,6 +73,82 @@ Create a new user.
 
 ---
 
+## Backoffice Endpoints (Protected)
+
+These endpoints manage roles, permissions, and the dynamic menu. They require appropriate permissions (e.g., `auth.role.read`, `auth.role.write`).
+
+### Get My Menu
+
+Returns the dynamic menu structure filtered by the user's permissions.
+
+- **URL:** `/backoffice/me/menu`
+- **Method:** `GET`
+- **Response:** `200 OK`
+  ```json
+  {
+    "data": [
+      {
+        "label": "Dashboard",
+        "path": "/dashboard",
+        "icon": "dashboard"
+      },
+      {
+        "label": "CMS",
+        "icon": "article",
+        "children": [...]
+      }
+    ]
+  }
+  ```
+
+### Get Roles
+
+List all available roles.
+
+- **URL:** `/backoffice/roles`
+- **Method:** `GET`
+- **Response:** `200 OK`
+  ```json
+  {
+    "data": [
+      { "id": 1, "name": "Admin" },
+      { "id": 2, "name": "Editor" }
+    ]
+  }
+  ```
+
+### Create Role
+
+- **URL:** `/backoffice/roles`
+- **Method:** `POST`
+- **Body:**
+  ```json
+  { "name": "Editor" }
+  ```
+- **Response:** `201 Created`
+
+### Assign Permission to Role
+
+- **URL:** `/backoffice/roles/{roleID}/permissions`
+- **Method:** `POST`
+- **Body:**
+  ```json
+  { "permission_id": "cms.page.create" }
+  ```
+- **Response:** `200 OK`
+
+### Assign Role to User
+
+- **URL:** `/backoffice/users/{userID}/roles`
+- **Method:** `POST`
+- **Body:**
+  ```json
+  { "role_id": 1 }
+  ```
+- **Response:** `200 OK`
+
+---
+
 ## CMS Endpoints (Protected)
 
 All endpoints below require a valid JWT token.
