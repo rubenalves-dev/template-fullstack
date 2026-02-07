@@ -1,0 +1,8 @@
+<nav>
+  @for(item of menuService.menu(); track $index) {
+    <a [routerLink]="item.path">
+      <i [class]="item.icon"></i>
+      <span>{{item.label}}</span>
+    </a>
+  }
+</nav>

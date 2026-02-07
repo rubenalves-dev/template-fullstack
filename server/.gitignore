@@ -27,3 +27,9 @@ tmp/
 
 # Backup files
 _bk/
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import {authGuard} from './core/guards/auth-guard';
+import {permissionGuard} from './core/guards/permission-guard';
 
 export const routes: Routes = [
   {
@@ -6,11 +8,11 @@ export const routes: Routes = [
     children: [
       {
         path: 'login',
-        loadComponent: () => import('./auth/features/login/login').then(m => m.LoginComponent)
+        loadComponent: () => import('./features/auth/login/login').then(m => m.Login)
       },
       {
         path: 'register',
-        loadComponent: () => import('./auth/features/register/register').then(m => m.RegisterComponent)
+        loadComponent: () => import('./features/auth/register/register').then(m => m.Register)
       },
       {
         path: '',
@@ -21,7 +23,19 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'admin/auth',
+    redirectTo: 'admin',
     pathMatch: 'full'
+  },
+  {
+    path: 'admin',
+    canActivate: [authGuard],
+    loadComponent: () => import('./shared/ui/layout/layout').then(m => m.Layout),
+    children: [
+      // {
+      //   path: 'pages',
+      //   canActivate: [permissionGuard],
+      //   data: {permissions: 'cms.page.read'},
+      // }
+    ]
   }
 ];

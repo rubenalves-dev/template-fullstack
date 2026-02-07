@@ -28,14 +28,6 @@ import { InputComponent } from 'shared';
           />
 
           <raiiaa-input
-            id="organizationName"
-            label="Organization Name"
-            type="text"
-            placeholder="Enter your organization name"
-            [control]="organizationNameControl"
-          />
-
-          <raiiaa-input
             id="email"
             label="Email"
             type="email"
@@ -91,10 +83,6 @@ export class RegisterComponent {
 
   get fullNameControl(): FormControl {
     return this.registerForm.controls.full_name;
-  }
-
-  get organizationNameControl(): FormControl {
-    return this.registerForm.controls.organization_name;
   }
 
   get emailControl(): FormControl {

@@ -1,0 +1,36 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Welcome Back</h1>
+      <p>Please enter your details to sign in.</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <raiiaa-input
+        id="email"
+        label="Email"
+        type="email"
+        placeholder="Enter your email"
+        [control]="emailControl"
+      />
+
+      <raiiaa-input
+        id="password"
+        label="Password"
+        type="password"
+        placeholder="Enter your password"
+        [control]="passwordControl"
+      />
+
+      <raiiaa-button
+        label="Sign In"
+        type="submit"
+        [disabled]="loginForm.invalid || isLoading()"
+      />
+    </form>
+
+    <div class="auth-footer">
+      <p>Don't have an account? <a routerLink="/admin/auth/register">Sign up</a></p>
+    </div>
+  </div>
+</div>
