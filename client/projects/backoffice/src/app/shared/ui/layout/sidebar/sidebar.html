@@ -1,8 +1,22 @@
-<nav>
-  @for(item of menuService.menu(); track $index) {
-    <a [routerLink]="item.path">
-      <i [class]="item.icon"></i>
-      <span>{{item.label}}</span>
-    </a>
-  }
+<nav class="sidebar">
+    @for (item of menuItems(); track $index) {
+        @if (item.path) {
+            <a class="sidebar__link" [routerLink]="item.path">
+                <i class="icon-{{ item.icon }}"></i>
+                <span>{{ item.label }}</span>
+            </a>
+        } @else if (!item.path && item.children) {
+            <button class="sidebar__link" (click)="toggleSubmenu(item.id)">
+                <i class="icon-{{ item.icon }}"></i>
+                <span>{{ item.label }}</span>
+            </button>
+            <!-- @if (expandedItems().has(item.id)) { -->
+            <div class="sidebar__submenu" [class.sidebar__submenu--expanded]="isExpanded(item.id)">
+                <div class="sidebar__submenu-wrapper">
+                    <raiiaa-sidebar [menuItems]="item.children" />
+                </div>
+            </div>
+            <!-- } -->
+        }
+    }
 </nav>

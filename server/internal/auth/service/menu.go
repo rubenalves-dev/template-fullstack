@@ -42,6 +42,7 @@ func buildMenuTree(defs []domain.MenuDefinition, userPerms map[string]bool) []do
 			}
 
 			node := domain.MenuNode{
+				Id:       d.ID,
 				Label:    d.Label,
 				Path:     d.Path,
 				Icon:     d.Icon,

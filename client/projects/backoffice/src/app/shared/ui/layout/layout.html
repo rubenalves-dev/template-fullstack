@@ -1,19 +1,15 @@
 <div class="layout">
-  <div class="layout__header">
-    <raiiaa-header />
-  </div>
+    <div class="layout__header">
+        <raiiaa-header />
+    </div>
 
-  <div class="layout__nav">
-    <raiiaa-sidebar />
-  </div>
+    <div class="layout__sidebar">
+        <raiiaa-sidebar [menuItems]="MenuService.menu()" />
+    </div>
 
-  <div class="layout__content">
-    <raiiaa-notification />
-    <router-outlet></router-outlet>
-  </div>
-
-  <div class="layout__aside">
-    <raiiaa-aside />
-  </div>
-
+    <div class="layout__content">
+        <raiiaa-notification />
+        <router-outlet></router-outlet>
+        <raiiaa-aside />
+    </div>
 </div>

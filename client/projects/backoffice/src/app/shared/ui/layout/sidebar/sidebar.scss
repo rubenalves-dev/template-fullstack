@@ -1,0 +1,43 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+
+    &__link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        color: inherit;
+
+        &:hover {
+            background-color: #ccc;
+        }
+    }
+
+    &__link-text {
+        font-size: 1rem;
+    }
+
+    &__icon {
+    }
+
+    &__submenu {
+        display: grid;
+        grid-template-rows: 0fr;
+        overflow: hidden;
+        transition: grid-template-rows 0.3s ease;
+
+        &--expanded {
+            grid-template-rows: 1fr;
+        }
+
+        &-wrapper {
+            min-height: 0;
+        }
+
+        .sidebar__link {
+            padding-left: 2rem;
+        }
+    }
+}

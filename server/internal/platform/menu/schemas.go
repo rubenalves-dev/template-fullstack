@@ -14,6 +14,7 @@ type MenuDefinition struct {
 }
 
 type MenuNode struct {
+	Id       string     `json:"id"`
 	Label    string     `json:"label"`
 	Path     string     `json:"path,omitempty"`
 	Icon     string     `json:"icon,omitempty"`
