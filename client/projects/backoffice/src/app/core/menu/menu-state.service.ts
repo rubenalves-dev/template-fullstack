@@ -8,7 +8,8 @@ export class MenuStateService {
     readonly expandedItems = this._expandedItems.asReadonly();
 
     toggle(id: string): void {
-        const current = new Set(this._expandedItems());
+        this.clear();
+        const current = new Set<string>();
         current.has(id) ? current.delete(id) : current.add(id);
         this._expandedItems.set(current);
     }
@@ -18,7 +19,8 @@ export class MenuStateService {
     }
 
     expand(id: string): void {
-        const current = new Set(this._expandedItems());
+        this.clear();
+        const current = new Set<string>();
         current.add(id);
         this._expandedItems.set(current);
     }

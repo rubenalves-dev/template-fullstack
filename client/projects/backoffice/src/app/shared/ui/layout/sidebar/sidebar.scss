@@ -14,6 +14,7 @@
         text-decoration: none;
         color: inherit;
         border-left: var(--sidebar-link-border-size) solid var(--primary);
+        border-bottom: var(--base-100) 1px solid;
         transition: background-color 0.5s ease;
 
         &:hover {
@@ -21,8 +22,16 @@
             background-color: var(--base-50);
         }
 
-        &:has(+ .sidebar__submenu--expanded) .sidebar__submenu-icon {
-            rotate: 180deg;
+        &:has(+ .sidebar__submenu--expanded) {
+            background-color: var(--base-50);
+
+            &:hover {
+                background-color: var(--base-100);
+            }
+
+            .sidebar__submenu-icon {
+                rotate: 180deg;
+            }
         }
     }
 
@@ -47,6 +56,7 @@
         grid-template-rows: 0fr;
         overflow: hidden;
         transition: grid-template-rows 0.3s ease;
+        background-color: var(--white);
 
         &--expanded {
             grid-template-rows: 1fr;
