@@ -2,13 +2,16 @@
     @for (item of menuItems(); track $index) {
         @if (item.path) {
             <a class="sidebar__link" [routerLink]="item.path">
-                <i class="icon-{{ item.icon }}"></i>
-                <span>{{ item.label }}</span>
+                <i class="sidebar__icon icon-{{ item.icon }}"></i>
+                <span class="sidebar__text">{{ item.label }}</span>
             </a>
         } @else if (!item.path && item.children) {
             <button class="sidebar__link" (click)="toggleSubmenu(item.id)">
-                <i class="icon-{{ item.icon }}"></i>
-                <span>{{ item.label }}</span>
+                <i class="sidebar__icon icon-{{ item.icon }}"></i>
+                <span class="sidebar__text">
+                    {{ item.label }}
+                    <i class="sidebar__submenu-icon icon-chevron-down"></i>
+                </span>
             </button>
             <!-- @if (expandedItems().has(item.id)) { -->
             <div class="sidebar__submenu" [class.sidebar__submenu--expanded]="isExpanded(item.id)">

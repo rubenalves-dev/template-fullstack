@@ -9,20 +9,66 @@
     box-sizing: border-box;
 }
 
-html {
-    font-size: 16px;
+:root {
+    font-size: var(--font-size);
+}
 
+html,
+body {
     height: 100%;
 }
 
-body {
-    font-family: $font-family-base;
-    font-size: $font-size-base;
-    line-height: $line-height-base;
-    color: #333;
-    background-color: #fff;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.title,
+.subtitle {
+    font-family: var(--font-heading);
+}
 
-    height: 100%;
+h1,
+.title {
+    font-size: clamp(2.5rem, 2.5vw, 4rem);
+    font-weight: 800;
+}
+
+h2,
+.subtitle {
+    font-size: clamp(2rem, 2vw, 3rem);
+    font-weight: 800;
+}
+
+.highlight {
+    font-family: var(--font-highlight);
+    font-size: clamp(6rem, 8vw, 12rem);
+    font-style: italic;
+    font-weight: 100;
+    color: var(--base-50);
+}
+
+body,
+.text,
+.text-bold {
+    font-family: var(--font-body);
+    font-size: var(--font-size-body);
+}
+
+.text-muted {
+    font-size: var(--font-size-sm);
+    color: var(--muted-foreground);
+}
+
+.text-serif {
+    font-family: var(--font-highlight);
+    font-weight: 100;
+}
+
+.text-bold,
+.bold {
+    font-weight: bold;
 }
 
 button {
@@ -31,13 +77,4 @@ button {
     background: none;
     font-size: inherit;
     font-family: inherit;
-}
-
-a {
-    color: $primary-color;
-    text-decoration: none;
-
-    &:hover {
-        text-decoration: underline;
-    }
 }
