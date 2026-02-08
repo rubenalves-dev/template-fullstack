@@ -2,8 +2,8 @@
  * Public API Surface of shared
  */
 
-export * from './lib/data-access/auth/auth.service';
 export * from './lib/data-access/auth/auth-interceptor';
+export * from './lib/data-access/auth/auth.service';
 export * from './lib/data-access/auth/types';
 export * from './lib/data-access/notification/notification.service';
 export * from './lib/data-access/notification/types';
