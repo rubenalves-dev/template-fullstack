@@ -1,0 +1,26 @@
+<div class="textarea">
+    <label class="textarea__label" [for]="id()">{{ label() }}</label>
+    <textarea
+        class="textarea__field"
+        [id]="id()"
+        [rows]="rows()"
+        [placeholder]="placeholder()"
+        [formControl]="control()"
+    ></textarea>
+    @if (hint()) {
+        <p class="textarea__hint">{{ hint() }}</p>
+    }
+    @if (control().invalid && (control().dirty || control().touched)) {
+        <div class="textarea__error" role="alert">
+            @if (control().hasError('required')) {
+                <span>This field is required.</span>
+            }
+            @if (control().hasError('minlength')) {
+                <span>Please enter at least {{ control().getError('minlength')?.requiredLength }} characters.</span>
+            }
+            @if (control().hasError('maxlength')) {
+                <span>Please keep this under {{ control().getError('maxlength')?.requiredLength }} characters.</span>
+            }
+        </div>
+    }
+</div>

@@ -1,7 +1,7 @@
 <nav class="sidebar">
     @for (item of menuItems(); track $index) {
         @if (item.path) {
-            <a class="sidebar__link" [routerLink]="item.path">
+            <a class="sidebar__link" [routerLink]="'/admin/' + item.path">
                 <i class="sidebar__icon icon-{{ item.icon }}"></i>
                 <span class="sidebar__text">{{ item.label }}</span>
             </a>

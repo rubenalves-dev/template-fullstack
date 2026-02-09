@@ -29,22 +29,25 @@
         z-index: -1;
         position: relative;
         background: var(--base-50);
-
-        overflow-y: auto;
-        overflow-x: hidden;
-
-        padding-inline-start: 1.5rem;
-        padding-inline-end: 1rem;
-        padding-block-start: 1.5rem;
-        padding-block-end: 1rem;
     }
 }
 
 main {
+    padding-inline-start: 1.5rem;
+    padding-inline-end: 1rem;
+    padding-block-start: 1.5rem;
+    padding-block-end: 1rem;
     width: 100%;
     height: 100%;
     background-color: var(--white);
 
+    position: relative;
+    isolation: isolate;
+    z-index: 1;
+
     border-radius: var(--radius);
     box-shadow: 0 0 1rem color-mix(in oklab, var(--black) 10%, transparent);
+
+    overflow-y: auto;
+    overflow-x: hidden;
 }
