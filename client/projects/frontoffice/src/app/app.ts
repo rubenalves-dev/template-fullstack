@@ -1,12 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NotificationComponent } from 'shared';
 
 @Component({
-  selector: 'raiiaa-root',
-  imports: [RouterOutlet, NotificationComponent],
+  selector: 'app-root',
+  imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.scss',
+  styleUrl: './app.css'
 })
 export class App {
   protected readonly title = signal('frontoffice');
