@@ -16,14 +16,22 @@ export class CmsService {
     }
 
     getPageBySlug(slug: string): Observable<ApiResponse<CmsPage>> {
-        return this.http.get<ApiResponse<CmsPage>>(`${this.baseUrl}/pages/${encodeURIComponent(slug)}`);
+        return this.http.get<ApiResponse<CmsPage>>(
+            `${this.baseUrl}/pages/${encodeURIComponent(slug)}`,
+        );
     }
 
-    updateMetadata(id: string | number, payload: CmsPageMetadataUpdate): Observable<ApiResponse<CmsPage>> {
+    updateMetadata(
+        id: string | number,
+        payload: CmsPageMetadataUpdate,
+    ): Observable<ApiResponse<CmsPage>> {
         return this.http.put<ApiResponse<CmsPage>>(`${this.baseUrl}/pages/${id}/metadata`, payload);
     }
 
-    updateLayout(id: string | number, layout: CmsPageLayoutRow[]): Observable<ApiResponse<CmsPage>> {
+    updateLayout(
+        id: string | number,
+        layout: CmsPageLayoutRow[],
+    ): Observable<ApiResponse<CmsPage>> {
         return this.http.put<ApiResponse<CmsPage>>(`${this.baseUrl}/pages/${id}/layout`, layout);
     }
 

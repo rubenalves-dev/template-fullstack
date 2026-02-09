@@ -16,10 +16,16 @@
                 <span>This field is required.</span>
             }
             @if (control().hasError('minlength')) {
-                <span>Please enter at least {{ control().getError('minlength')?.requiredLength }} characters.</span>
+                <span
+                    >Please enter at least
+                    {{ control().getError('minlength')?.requiredLength }} characters.</span
+                >
             }
             @if (control().hasError('maxlength')) {
-                <span>Please keep this under {{ control().getError('maxlength')?.requiredLength }} characters.</span>
+                <span
+                    >Please keep this under
+                    {{ control().getError('maxlength')?.requiredLength }} characters.</span
+                >
             }
         </div>
     }

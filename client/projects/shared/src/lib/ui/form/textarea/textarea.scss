@@ -17,7 +17,9 @@
         resize: vertical;
         background-color: var(--input);
         color: var(--foreground);
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
 
         &:focus {
             outline: none;
