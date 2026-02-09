@@ -20,6 +20,7 @@ func RegisterHTTPHandlers(r chi.Router, svc domain.Service) {
 	h := &CMSHandler{svc: svc}
 
 	r.Route("/pages", func(r chi.Router) {
+		r.Get("/", h.ListPages)
 		r.Post("/", h.CreateDraft)
 		r.Get("/{slug}", h.GetBySlug)
 		r.Put("/{id}/metadata", h.UpdateMetadata)
@@ -27,6 +28,16 @@ func RegisterHTTPHandlers(r chi.Router, svc domain.Service) {
 		r.Post("/{id}/publish", h.Publish)
 		r.Post("/{id}/archive", h.Archive)
 	})
+}
+
+func (h *CMSHandler) ListPages(w http.ResponseWriter, r *http.Request) {
+	pages, err := h.svc.ListPages(r.Context())
+	if err != nil {
+		jsonutil.RenderError(w, http.StatusInternalServerError, "INTERNAL_ERROR", err.Error())
+		return
+	}
+
+	jsonutil.RenderJSON(w, http.StatusOK, pages)
 }
 
 func (h *CMSHandler) CreateDraft(w http.ResponseWriter, r *http.Request) {

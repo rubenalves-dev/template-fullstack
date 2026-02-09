@@ -179,6 +179,10 @@ func (s service) GetPageBySlug(ctx context.Context, Slug string) (*domain.Page, 
 	return page, nil
 }
 
+func (s service) ListPages(ctx context.Context) ([]domain.Page, error) {
+	return s.repo.List(ctx)
+}
+
 func slugify(text string) string {
 	var re = regexp.MustCompile("[^a-z0-9]+")
 	return strings.Trim(re.ReplaceAllString(strings.ToLower(text), "-"), "-")
