@@ -30,3 +30,20 @@ type Role struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
+
+type AuthTokens struct {
+	AccessToken      string    `json:"access_token"`
+	RefreshToken     string    `json:"refresh_token"`
+	AccessExpiresAt  time.Time `json:"access_expires_at"`
+	RefreshExpiresAt time.Time `json:"refresh_expires_at"`
+}
+
+type Session struct {
+	ID               uuid.UUID
+	UserID           uuid.UUID
+	RefreshTokenHash string
+	ExpiresAt        time.Time
+	CreatedAt        time.Time
+	UpdatedAt        time.Time
+	RevokedAt        *time.Time
+}

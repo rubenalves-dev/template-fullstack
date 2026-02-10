@@ -17,8 +17,18 @@
               "script": {
                 "exec": [
                   "var jsonData = pm.response.json();",
-                  "if (jsonData.data && jsonData.data.token) {",
-                  "    pm.environment.set(\"token\", jsonData.data.token);",
+                  "if (jsonData.data && jsonData.data.access_token) {",
+                  "    pm.environment.set(\"token\", jsonData.data.access_token);",
+                  "    pm.environment.set(\"access_token\", jsonData.data.access_token);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.refresh_token) {",
+                  "    pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.access_expires_at) {",
+                  "    pm.environment.set(\"access_expires_at\", jsonData.data.access_expires_at);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.refresh_expires_at) {",
+                  "    pm.environment.set(\"refresh_expires_at\", jsonData.data.refresh_expires_at);",
                   "}"
                 ],
                 "type": "text/javascript"
@@ -63,6 +73,70 @@
               "raw": "{{baseUrl}}/auth/register",
               "host": ["{{baseUrl}}"],
               "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.access_token) {",
+                  "    pm.environment.set(\"token\", jsonData.data.access_token);",
+                  "    pm.environment.set(\"access_token\", jsonData.data.access_token);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.refresh_token) {",
+                  "    pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.access_expires_at) {",
+                  "    pm.environment.set(\"access_expires_at\", jsonData.data.access_expires_at);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.refresh_expires_at) {",
+                  "    pm.environment.set(\"refresh_expires_at\", jsonData.data.refresh_expires_at);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
             }
           },
           "response": []
@@ -313,6 +387,26 @@
     },
     {
       "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "access_expires_at",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_expires_at",
       "value": "",
       "type": "string"
     },
