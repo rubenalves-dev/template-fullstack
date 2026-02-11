@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 
 import { ApiResponse } from '../../core/api/dtos';
 import { AUTH_API_BASE_URL } from './auth-tokens';
-import { Menu, User } from './dtos';
+import { User } from './dtos';
 
 @Injectable({
     providedIn: 'root',
@@ -14,10 +14,6 @@ export class ProfileService {
 
     getMe() {
         return this.http.get<ApiResponse<User>>(`${this.baseUrl}/me`);
-    }
-
-    getMyMenu() {
-        return this.http.get<ApiResponse<Menu>>(`${this.baseUrl}/backoffice/me/menu`);
     }
 
     // TODO: Implement settings endpoints when backend is ready

@@ -1,14 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
+import { ApiResponse } from '../../core/api/dtos';
 import { AUTHZ_API_BASE_URL } from './auth-tokens';
-import {
-    AddPermissionRequest,
-    ApiResponse,
-    AssignRoleRequest,
-    CreateRoleRequest,
-    Role,
-} from './dtos';
+import { AddPermissionRequest, AssignRoleRequest, CreateRoleRequest, Role } from './dtos';
 
 @Injectable({
     providedIn: 'root',

@@ -1,7 +1,3 @@
-export interface ApiResponse<T> {
-    data: T;
-}
-
 export interface AuthLoginRequest {
     email: string;
     password: string;

@@ -1,4 +1,4 @@
-import { ApiResponse } from '../auth/dtos';
+import { ApiResponse } from '../../core/api/dtos';
 
 // Page Statuses
 export type PageStatus = 'draft' | 'published' | 'archived';

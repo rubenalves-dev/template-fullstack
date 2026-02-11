@@ -2,6 +2,8 @@
  * Public API Surface of lib
  */
 
+export * from './lib/core/api/api-client';
+export * from './lib/core/api/dtos';
 export * from './lib/features/auth/auth-service';
 export * from './lib/features/auth/auth-tokens';
 export * from './lib/features/auth/dtos';

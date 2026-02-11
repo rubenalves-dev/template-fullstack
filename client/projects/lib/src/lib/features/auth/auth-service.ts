@@ -3,160 +3,160 @@ import { HttpClient } from '@angular/common/http';
 import { DestroyRef, Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { catchError, map, of } from 'rxjs';
 
+import { ApiResponse } from '../../core/api/dtos';
 import { AUTH_API_BASE_URL, AUTH_REFRESH_BUFFER_MS } from './auth-tokens';
 import {
-  ApiResponse,
-  AuthLoginRequest,
-  AuthRegisterRequest,
-  AuthSession,
-  AuthTokensResponse,
-  RefreshRequest,
+    AuthLoginRequest,
+    AuthRegisterRequest,
+    AuthSession,
+    AuthTokensResponse,
+    RefreshRequest,
 } from './dtos';
 import { TokenStore } from './token-store';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class AuthService {
-  private readonly http = inject(HttpClient);
-  private readonly tokenStore = inject(TokenStore);
-  private readonly baseUrl = inject(AUTH_API_BASE_URL);
-  private readonly refreshBufferMs = inject(AUTH_REFRESH_BUFFER_MS);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+    private readonly http = inject(HttpClient);
+    private readonly tokenStore = inject(TokenStore);
+    private readonly baseUrl = inject(AUTH_API_BASE_URL);
+    private readonly refreshBufferMs = inject(AUTH_REFRESH_BUFFER_MS);
+    private readonly destroyRef = inject(DestroyRef);
+    private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-  private readonly sessionSignal = signal<AuthSession | null>(null);
-  readonly session = this.sessionSignal.asReadonly();
-  readonly accessToken = computed(() => this.sessionSignal()?.accessToken ?? null);
-  readonly isAuthenticated = computed(() => {
-    const session = this.sessionSignal();
-    if (!session) {
-      return false;
-    }
-    return !this.isExpired(session.accessExpiresAt);
-  });
+    private readonly sessionSignal = signal<AuthSession | null>(null);
+    readonly session = this.sessionSignal.asReadonly();
+    readonly accessToken = computed(() => this.sessionSignal()?.accessToken ?? null);
+    readonly isAuthenticated = computed(() => {
+        const session = this.sessionSignal();
+        if (!session) {
+            return false;
+        }
+        return !this.isExpired(session.accessExpiresAt);
+    });
 
-  private refreshTimerId: number | null = null;
+    private refreshTimerId: number | null = null;
 
-  constructor() {
-    this.destroyRef.onDestroy(() => this.clearRefreshTimer());
-    this.restoreSession();
-  }
-
-  login(request: AuthLoginRequest) {
-    return this.http
-      .post<ApiResponse<AuthTokensResponse>>(`${this.baseUrl}/auth/login`, request, {
-        withCredentials: true,
-      })
-      .pipe(map((response) => this.applyTokens(response.data)));
-  }
-
-  register(request: AuthRegisterRequest) {
-    return this.http
-      .post<ApiResponse<AuthTokensResponse>>(`${this.baseUrl}/auth/register`, request, {
-        withCredentials: true,
-      })
-      .pipe(map((response) => this.applyTokens(response.data)));
-  }
-
-  refresh() {
-    const refreshToken = this.tokenStore.getRefreshToken();
-    const payload: RefreshRequest = refreshToken ? { refresh_token: refreshToken } : {};
-
-    return this.http
-      .post<ApiResponse<AuthTokensResponse>>(`${this.baseUrl}/auth/refresh`, payload, {
-        withCredentials: true,
-      })
-      .pipe(map((response) => this.applyTokens(response.data)));
-  }
-
-  logout(): void {
-    this.clearSession();
-  }
-
-  private restoreSession(): void {
-    const accessToken = this.tokenStore.getAccessToken();
-    const accessExpiresAt = this.tokenStore.getAccessExpiresAt();
-
-    if (!accessToken || !accessExpiresAt || this.isExpired(accessExpiresAt)) {
-      this.clearSession();
-      return;
+    constructor() {
+        this.destroyRef.onDestroy(() => this.clearRefreshTimer());
+        this.restoreSession();
     }
 
-    const session: AuthSession = {
-      accessToken,
-      accessExpiresAt,
-    };
-
-    this.sessionSignal.set(session);
-    this.scheduleRefresh(accessExpiresAt);
-  }
-
-  private applyTokens(tokens: AuthTokensResponse): AuthSession {
-    const session: AuthSession = {
-      accessToken: tokens.access_token,
-      accessExpiresAt: tokens.access_expires_at,
-      refreshToken: tokens.refresh_token,
-      refreshExpiresAt: tokens.refresh_expires_at,
-    };
-
-    this.tokenStore.setSession(session);
-    this.sessionSignal.set(session);
-    this.scheduleRefresh(session.accessExpiresAt);
-
-    return session;
-  }
-
-  private scheduleRefresh(accessExpiresAt: string): void {
-    this.clearRefreshTimer();
-
-    if (!this.isBrowser) {
-      return;
+    login(request: AuthLoginRequest) {
+        return this.http
+            .post<ApiResponse<AuthTokensResponse>>(`${this.baseUrl}/auth/login`, request, {
+                withCredentials: true,
+            })
+            .pipe(map((response) => this.applyTokens(response.data)));
     }
 
-    const refreshAt = this.toEpochMs(accessExpiresAt) - this.refreshBufferMs;
-    const delay = refreshAt - Date.now();
-
-    if (delay <= 0) {
-      this.triggerRefresh();
-      return;
+    register(request: AuthRegisterRequest) {
+        return this.http
+            .post<ApiResponse<AuthTokensResponse>>(`${this.baseUrl}/auth/register`, request, {
+                withCredentials: true,
+            })
+            .pipe(map((response) => this.applyTokens(response.data)));
     }
 
-    this.refreshTimerId = window.setTimeout(() => this.triggerRefresh(), delay);
-  }
+    refresh() {
+        const refreshToken = this.tokenStore.getRefreshToken();
+        const payload: RefreshRequest = refreshToken ? { refresh_token: refreshToken } : {};
 
-  private triggerRefresh(): void {
-    this.refresh()
-      .pipe(
-        catchError(() => {
-          this.clearSession();
-          return of(null);
-        }),
-      )
-      .subscribe();
-  }
-
-  private clearSession(): void {
-    this.clearRefreshTimer();
-    this.tokenStore.clearSession();
-    this.sessionSignal.set(null);
-  }
-
-  private clearRefreshTimer(): void {
-    if (this.refreshTimerId === null) {
-      return;
+        return this.http
+            .post<ApiResponse<AuthTokensResponse>>(`${this.baseUrl}/auth/refresh`, payload, {
+                withCredentials: true,
+            })
+            .pipe(map((response) => this.applyTokens(response.data)));
     }
 
-    window.clearTimeout(this.refreshTimerId);
-    this.refreshTimerId = null;
-  }
+    logout(): void {
+        this.clearSession();
+    }
 
-  private isExpired(expiresAt: string): boolean {
-    return this.toEpochMs(expiresAt) <= Date.now();
-  }
+    private restoreSession(): void {
+        const accessToken = this.tokenStore.getAccessToken();
+        const accessExpiresAt = this.tokenStore.getAccessExpiresAt();
 
-  private toEpochMs(expiresAt: string): number {
-    const parsed = Date.parse(expiresAt);
-    return Number.isNaN(parsed) ? 0 : parsed;
-  }
+        if (!accessToken || !accessExpiresAt || this.isExpired(accessExpiresAt)) {
+            this.clearSession();
+            return;
+        }
+
+        const session: AuthSession = {
+            accessToken,
+            accessExpiresAt,
+        };
+
+        this.sessionSignal.set(session);
+        this.scheduleRefresh(accessExpiresAt);
+    }
+
+    private applyTokens(tokens: AuthTokensResponse): AuthSession {
+        const session: AuthSession = {
+            accessToken: tokens.access_token,
+            accessExpiresAt: tokens.access_expires_at,
+            refreshToken: tokens.refresh_token,
+            refreshExpiresAt: tokens.refresh_expires_at,
+        };
+
+        this.tokenStore.setSession(session);
+        this.sessionSignal.set(session);
+        this.scheduleRefresh(session.accessExpiresAt);
+
+        return session;
+    }
+
+    private scheduleRefresh(accessExpiresAt: string): void {
+        this.clearRefreshTimer();
+
+        if (!this.isBrowser) {
+            return;
+        }
+
+        const refreshAt = this.toEpochMs(accessExpiresAt) - this.refreshBufferMs;
+        const delay = refreshAt - Date.now();
+
+        if (delay <= 0) {
+            this.triggerRefresh();
+            return;
+        }
+
+        this.refreshTimerId = window.setTimeout(() => this.triggerRefresh(), delay);
+    }
+
+    private triggerRefresh(): void {
+        this.refresh()
+            .pipe(
+                catchError(() => {
+                    this.clearSession();
+                    return of(null);
+                }),
+            )
+            .subscribe();
+    }
+
+    private clearSession(): void {
+        this.clearRefreshTimer();
+        this.tokenStore.clearSession();
+        this.sessionSignal.set(null);
+    }
+
+    private clearRefreshTimer(): void {
+        if (this.refreshTimerId === null) {
+            return;
+        }
+
+        window.clearTimeout(this.refreshTimerId);
+        this.refreshTimerId = null;
+    }
+
+    private isExpired(expiresAt: string): boolean {
+        return this.toEpochMs(expiresAt) <= Date.now();
+    }
+
+    private toEpochMs(expiresAt: string): number {
+        const parsed = Date.parse(expiresAt);
+        return Number.isNaN(parsed) ? 0 : parsed;
+    }
 }
