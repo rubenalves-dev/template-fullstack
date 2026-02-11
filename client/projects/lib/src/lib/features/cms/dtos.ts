@@ -5,46 +5,46 @@ export type PageStatus = 'draft' | 'published' | 'archived';
 
 // Page Interfaces
 export interface Page {
-  id: string;
-  title: string;
-  slug: string;
-  seo_description: string | null;
-  seo_keywords: string | null;
-  status: PageStatus;
-  created_at: string;
-  updated_at: string;
+    id: string;
+    title: string;
+    slug: string;
+    seo_description: string | null;
+    seo_keywords: string | null;
+    status: PageStatus;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface PageDetail extends Page {
-  layout: PageRow[];
+    layout: PageRow[];
 }
 
 // Requests
 export interface CreateDraftPageRequest {
-  title: string;
+    title: string;
 }
 
 export interface UpdatePageMetadataRequest {
-  title?: string;
-  seo_description?: string;
-  keywords?: string[];
+    title?: string;
+    seo_description?: string;
+    keywords?: string[];
 }
 
 // Layout Structures
 export interface PageRow {
-  sort_order: number;
-  css_class?: string;
-  columns: PageColumn[];
+    sort_order: number;
+    css_class?: string;
+    columns: PageColumn[];
 }
 
 export interface PageColumn {
-  width_md?: string;
-  blocks: PageBlock[];
+    width_md?: string;
+    blocks: PageBlock[];
 }
 
 export interface PageBlock {
-  type: string;
-  content: Record<string, unknown>;
+    type: string;
+    content: Record<string, unknown>;
 }
 
 // Response type aliases for convenience
