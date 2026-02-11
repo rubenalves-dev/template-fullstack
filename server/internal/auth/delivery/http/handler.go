@@ -53,6 +53,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	h.setTokenCookies(w, tokens)
 	jsonutil.RenderJSON(w, http.StatusOK, loginResponse{
 		AccessToken:      tokens.AccessToken,
 		RefreshToken:     tokens.RefreshToken,
@@ -75,6 +76,7 @@ func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	h.setTokenCookies(w, tokens)
 	jsonutil.RenderJSON(w, http.StatusOK, loginResponse{
 		AccessToken:      tokens.AccessToken,
 		RefreshToken:     tokens.RefreshToken,
@@ -103,4 +105,16 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	jsonutil.RenderJSON(w, http.StatusCreated, map[string]string{"message": "User registered successfully"})
+}
+
+func (h *AuthHandler) setTokenCookies(w http.ResponseWriter, tokens domain.AuthTokens) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    tokens.RefreshToken,
+		Expires:  tokens.RefreshExpiresAt,
+		Path:     "/",   // Crucial: cookie must be available for all API paths
+		HttpOnly: true,  // Essential: Prevents JS from stealing the token
+		Secure:   false, // Only send over HTTPS
+		//SameSite: http.SameSiteLaxMode, // CSRF protection
+	})
 }

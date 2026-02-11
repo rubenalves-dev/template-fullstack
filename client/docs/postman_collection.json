@@ -1,0 +1,429 @@
+{
+  "info": {
+    "_postman_id": "template-fullstack-api-collection",
+    "name": "Template Fullstack API",
+    "description": "Collection for Auth, Backoffice and CMS APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.access_token) {",
+                  "    pm.environment.set(\"token\", jsonData.data.access_token);",
+                  "    pm.environment.set(\"access_token\", jsonData.data.access_token);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.refresh_token) {",
+                  "    pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.access_expires_at) {",
+                  "    pm.environment.set(\"access_expires_at\", jsonData.data.access_expires_at);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.refresh_expires_at) {",
+                  "    pm.environment.set(\"refresh_expires_at\", jsonData.data.refresh_expires_at);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\",\n    \"full_name\": \"New User\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.access_token) {",
+                  "    pm.environment.set(\"token\", jsonData.data.access_token);",
+                  "    pm.environment.set(\"access_token\", jsonData.data.access_token);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.refresh_token) {",
+                  "    pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.access_expires_at) {",
+                  "    pm.environment.set(\"access_expires_at\", jsonData.data.access_expires_at);",
+                  "}",
+                  "if (jsonData.data && jsonData.data.refresh_expires_at) {",
+                  "    pm.environment.set(\"refresh_expires_at\", jsonData.data.refresh_expires_at);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Backoffice",
+      "item": [
+        {
+          "name": "Get My Menu",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/backoffice/me/menu",
+              "host": ["{{baseUrl}}"],
+              "path": ["backoffice", "me", "menu"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Roles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/backoffice/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["backoffice", "roles"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Editor\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/backoffice/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["backoffice", "roles"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Permission to Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"permission_id\": \"cms.page.read\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/backoffice/roles/{{roleId}}/permissions",
+              "host": ["{{baseUrl}}"],
+              "path": ["backoffice", "roles", "{{roleId}}", "permissions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Assign Role to User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"role_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/backoffice/users/{{userId}}/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["backoffice", "users", "{{userId}}", "roles"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "CMS",
+      "item": [
+        {
+          "name": "Create Draft Page",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Home Page\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pages",
+              "host": ["{{baseUrl}}"],
+              "path": ["pages"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Page by Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pages/home-page",
+              "host": ["{{baseUrl}}"],
+              "path": ["pages", "home-page"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Page Metadata",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Home Page Updated\",\n    \"seo_description\": \"Description...\",\n    \"keywords\": [\"home\", \"cms\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pages/{{pageId}}/metadata",
+              "host": ["{{baseUrl}}"],
+              "path": ["pages", "{{pageId}}", "metadata"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Page Layout",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n    {\n        \"sort_order\": 0,\n        \"css_class\": \"container\",\n        \"columns\": [\n            {\n                \"width_md\": \"12\",\n                \"blocks\": [\n                    {\n                        \"type\": \"hero\",\n                        \"content\": {\n                            \"title\": \"Welcome\"\n                        }\n                    }\n                ]\n            }\n        ]\n    }\n]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pages/{{pageId}}/layout",
+              "host": ["{{baseUrl}}"],
+              "path": ["pages", "{{pageId}}", "layout"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Publish Page",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pages/{{pageId}}/publish",
+              "host": ["{{baseUrl}}"],
+              "path": ["pages", "{{pageId}}", "publish"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Archive Page",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pages/{{pageId}}/archive",
+              "host": ["{{baseUrl}}"],
+              "path": ["pages", "{{pageId}}", "archive"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "access_expires_at",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_expires_at",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "pageId",
+      "value": "PAGE_UUID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "roleId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "USER_UUID_HERE",
+      "type": "string"
+    }
+  ]
+}
