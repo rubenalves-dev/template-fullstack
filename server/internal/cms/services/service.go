@@ -26,10 +26,11 @@ func NewService(repo domain.Repository, nc *nats.Conn) domain.Service {
 
 func (s service) CreateDraft(ctx context.Context, title string) error {
 	page := &domain.Page{
-		ID:     uuid.New(),
-		Title:  title,
-		Slug:   slugify(title),
-		Status: "draft",
+		ID:       uuid.New(),
+		Title:    title,
+		Slug:     slugify(title),
+		PageType: "dynamic",
+		Status:   "draft",
 	}
 
 	err := s.repo.Create(ctx, page)
@@ -83,6 +84,44 @@ func (s service) ArchivePage(ctx context.Context, id uuid.UUID) error {
 	}
 	eventBytes, _ := json.Marshal(event)
 	return s.nc.Publish(events.CmsPageArchived, eventBytes)
+}
+
+func (s service) RegisterStaticPage(ctx context.Context, req domain.RegisterStaticPageRequest) error {
+	existingPage, err := s.repo.GetBySlug(ctx, req.Slug)
+	if err == nil && existingPage != nil {
+		return domain.ErrPageAlreadyExists
+	}
+
+	page := &domain.Page{
+		ID:         uuid.New(),
+		Title:      req.Title,
+		Slug:       req.Slug,
+		PageType:   "static",
+		IsEditable: req.IsEditable,
+		Status:     "published",
+	}
+
+	err = s.repo.Create(ctx, page)
+	if err != nil {
+		return err
+	}
+	registeredPage, err := s.repo.GetByID(ctx, page.ID)
+	if err != nil {
+		return err
+	}
+
+	event := events.CmsPagePublishedData{
+		PageID: registeredPage.ID,
+		Title:  registeredPage.Title,
+		Slug:   registeredPage.Slug,
+	}
+	eventBytes, err := json.Marshal(event)
+	if err != nil {
+		return err
+	}
+
+	return s.nc.Publish(events.CmsPagePublished, eventBytes)
+
 }
 
 func (s service) UpdatePageMetadata(ctx context.Context, id uuid.UUID, req domain.PageUpdateRequest) error {

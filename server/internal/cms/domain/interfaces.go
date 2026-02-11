@@ -28,6 +28,7 @@ type Service interface {
 	CreateDraft(ctx context.Context, title string) error
 	PublishPage(ctx context.Context, id uuid.UUID) error
 	ArchivePage(ctx context.Context, id uuid.UUID) error
+	RegisterStaticPage(ctx context.Context, req RegisterStaticPageRequest) error
 
 	// Content Management
 	UpdatePageMetadata(ctx context.Context, id uuid.UUID, req PageUpdateRequest) error

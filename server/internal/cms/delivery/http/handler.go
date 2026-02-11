@@ -22,6 +22,7 @@ func RegisterHTTPHandlers(r chi.Router, svc domain.Service) {
 	r.Route("/pages", func(r chi.Router) {
 		r.Get("/", h.ListPages)
 		r.Post("/", h.CreateDraft)
+		r.Post("/register", h.RegisterPage)
 		r.Get("/{slug}", h.GetBySlug)
 		r.Put("/{id}/metadata", h.UpdateMetadata)
 		r.Put("/{id}/layout", h.UpdateLayout)
@@ -53,6 +54,21 @@ func (h *CMSHandler) CreateDraft(w http.ResponseWriter, r *http.Request) {
 	}
 
 	jsonutil.RenderJSON(w, http.StatusCreated, map[string]string{"message": "Draft created successfully"})
+}
+
+func (h *CMSHandler) RegisterPage(w http.ResponseWriter, r *http.Request) {
+	var req domain.RegisterStaticPageRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		jsonutil.RenderError(w, http.StatusBadRequest, "INVALID_REQUEST", "Failed to parse request body")
+		return
+	}
+
+	if err := h.svc.RegisterStaticPage(r.Context(), req); err != nil {
+		jsonutil.RenderError(w, http.StatusInternalServerError, "INTERNAL_ERROR", err.Error())
+		return
+	}
+
+	jsonutil.RenderJSON(w, http.StatusCreated, map[string]string{"message": "Static page registered successfully"})
 }
 
 func (h *CMSHandler) GetBySlug(w http.ResponseWriter, r *http.Request) {

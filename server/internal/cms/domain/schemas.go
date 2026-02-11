@@ -13,8 +13,12 @@ type Page struct {
 	SEODescription string    `json:"seo_description"`
 	SEOKeywords    []string  `json:"seo_keywords"`
 	Status         string    `json:"status"`
-	CreatedAt      time.Time `json:"created_at"`
-	UpdatedAt      time.Time `json:"updated_at"`
+
+	PageType   string `json:"page_type"` // Static or Dynamic
+	IsEditable bool   `json:"is_editable"`
+
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 
 	Rows []Row `json:"rows,omitempty"`
 }

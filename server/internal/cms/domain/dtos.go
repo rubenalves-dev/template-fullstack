@@ -12,7 +12,15 @@ type PageUpdateRequest struct {
 
 // CreatePageRequest handles initial page creation
 type CreatePageRequest struct {
-	Title string `json:"title"`
+	Title      string `json:"title"`
+	PageType   string `json:"page_type"` // Static or Dynamic
+	IsEditable bool   `json:"is_editable"`
+}
+
+type RegisterStaticPageRequest struct {
+	Title      string `json:"title"`
+	Slug       string `json:"slug"`
+	IsEditable bool   `json:"is_editable"`
 }
 
 // RowRequest handles layout updates
