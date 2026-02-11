@@ -49,3 +49,12 @@ export interface AssignRoleRequest {
 }
 
 export type BackofficeMenu = Record<string, unknown>;
+
+export interface User {
+  id: string;
+  email: string;
+  full_name: string;
+  roles?: Role[];
+  created_at?: string;
+  updated_at?: string;
+}
