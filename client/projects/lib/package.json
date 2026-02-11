@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^21.1.0",
-    "@angular/core": "^21.1.0"
+    "@angular/core": "^21.1.0",
+    "@angular/aria": "^21.1.0"
   },
   "dependencies": {
-    "@angular/aria": "^21.1.3",
     "tslib": "^2.3.0"
   },
   "sideEffects": false
