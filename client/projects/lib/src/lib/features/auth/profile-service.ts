@@ -1,7 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
-import { ApiResponse } from '../../core/api/dtos';
+import { ApiClient } from '../../core/api/api-client';
 import { AUTH_API_BASE_URL } from './auth-tokens';
 import { Menu, User } from './dtos';
 
@@ -9,15 +8,15 @@ import { Menu, User } from './dtos';
     providedIn: 'root',
 })
 export class ProfileService {
-    private readonly http = inject(HttpClient);
+    private readonly api = inject(ApiClient);
     private readonly baseUrl = inject(AUTH_API_BASE_URL);
 
     getMe() {
-        return this.http.get<ApiResponse<User>>(`${this.baseUrl}/me`);
+        return this.api.get<User>(`${this.baseUrl}/me`);
     }
 
     getMyMenu() {
-        return this.http.get<ApiResponse<Menu>>(`${this.baseUrl}/backoffice/me/menu`);
+        return this.api.get<Menu>(`${this.baseUrl}/backoffice/me/menu`);
     }
 
     // TODO: Implement settings endpoints when backend is ready

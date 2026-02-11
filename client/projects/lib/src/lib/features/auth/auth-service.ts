@@ -1,9 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { DestroyRef, Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { catchError, map, of } from 'rxjs';
 
-import { ApiResponse } from '../../core/api/dtos';
+import { ApiClient } from '../../core/api/api-client';
 import { AUTH_API_BASE_URL, AUTH_REFRESH_BUFFER_MS } from './auth-tokens';
 import {
     AuthLoginRequest,
@@ -18,7 +17,7 @@ import { TokenStore } from './token-store';
     providedIn: 'root',
 })
 export class AuthService {
-    private readonly http = inject(HttpClient);
+    private readonly api = inject(ApiClient);
     private readonly tokenStore = inject(TokenStore);
     private readonly baseUrl = inject(AUTH_API_BASE_URL);
     private readonly refreshBufferMs = inject(AUTH_REFRESH_BUFFER_MS);
@@ -44,30 +43,30 @@ export class AuthService {
     }
 
     login(request: AuthLoginRequest) {
-        return this.http
-            .post<ApiResponse<AuthTokensResponse>>(`${this.baseUrl}/auth/login`, request, {
+        return this.api
+            .post<AuthTokensResponse>(`${this.baseUrl}/auth/login`, request, {
                 withCredentials: true,
             })
-            .pipe(map((response) => this.applyTokens(response.data)));
+            .pipe(map((response) => this.applyTokens(response)));
     }
 
     register(request: AuthRegisterRequest) {
-        return this.http
-            .post<ApiResponse<AuthTokensResponse>>(`${this.baseUrl}/auth/register`, request, {
+        return this.api
+            .post<AuthTokensResponse>(`${this.baseUrl}/auth/register`, request, {
                 withCredentials: true,
             })
-            .pipe(map((response) => this.applyTokens(response.data)));
+            .pipe(map((response) => this.applyTokens(response)));
     }
 
     refresh() {
         const refreshToken = this.tokenStore.getRefreshToken();
         const payload: RefreshRequest = refreshToken ? { refresh_token: refreshToken } : {};
 
-        return this.http
-            .post<ApiResponse<AuthTokensResponse>>(`${this.baseUrl}/auth/refresh`, payload, {
+        return this.api
+            .post<AuthTokensResponse>(`${this.baseUrl}/auth/refresh`, payload, {
                 withCredentials: true,
             })
-            .pipe(map((response) => this.applyTokens(response.data)));
+            .pipe(map((response) => this.applyTokens(response)));
     }
 
     logout(): void {

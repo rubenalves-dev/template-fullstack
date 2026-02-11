@@ -29,7 +29,7 @@ export interface LogErrorRequest {
 @Injectable({
     providedIn: 'root',
 })
-export class ErrorHandlerService {
+export class ErrorService {
     private readonly http = inject(HttpClient);
     private readonly errorMapper = inject(ErrorMapper);
     private readonly logger = inject(LoggerService);
@@ -47,7 +47,7 @@ export class ErrorHandlerService {
      * Create an Error object from a normalized error.
      * Useful for re-throwing standardized errors.
      */
-    createException(error: NormalizedError): Error {
+    newError(error: NormalizedError): Error {
         const exception = new Error(error.message);
         exception.name = error.code;
         (exception as Error & { details?: unknown }).details = error.details;
@@ -58,9 +58,9 @@ export class ErrorHandlerService {
      * Throw a standardized exception.
      * Normalizes the error first, then throws it.
      */
-    throwError(error: unknown): never {
+    throw(error: unknown): never {
         const normalized = this.normalize(error);
-        throw this.createException(normalized);
+        throw this.newError(normalized);
     }
 
     /**

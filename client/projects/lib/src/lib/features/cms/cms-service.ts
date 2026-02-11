@@ -1,14 +1,12 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, InjectionToken, inject } from '@angular/core';
+import { ApiClient } from '../../core/api/api-client';
 
 import {
     CreateDraftPageRequest,
-    CreatePageResponse,
-    PageDetailResponse,
-    PageListResponse,
+    Page,
+    PageDetail,
     PageRow,
     UpdatePageMetadataRequest,
-    UpdatePageResponse,
 } from './dtos';
 
 export const CMS_API_BASE_URL = new InjectionToken<string>('CMS_API_BASE_URL', {
@@ -23,7 +21,7 @@ export const CMS_API_BASE_URL = new InjectionToken<string>('CMS_API_BASE_URL', {
     providedIn: 'root',
 })
 export class CmsService {
-    private readonly http = inject(HttpClient);
+    private readonly api = inject(ApiClient);
     private readonly baseUrl = inject(CMS_API_BASE_URL);
 
     /**
@@ -31,51 +29,48 @@ export class CmsService {
      * Returns: id, title, slug, seo_description, seo_keywords, status, created_at, updated_at
      */
     getPages() {
-        return this.http.get<PageListResponse>(`${this.baseUrl}/pages`);
+        return this.api.get<Page[]>(`${this.baseUrl}/pages`);
     }
 
     /**
      * Get a page by its slug with full details including layout.
      */
     getPageBySlug(slug: string) {
-        return this.http.get<PageDetailResponse>(`${this.baseUrl}/pages/${slug}`);
+        return this.api.get<PageDetail>(`${this.baseUrl}/pages/${slug}`);
     }
 
     /**
      * Create a new draft page.
      */
     createDraftPage(request: CreateDraftPageRequest) {
-        return this.http.post<CreatePageResponse>(`${this.baseUrl}/pages`, request);
+        return this.api.post<Page>(`${this.baseUrl}/pages`, request);
     }
 
     /**
      * Update page metadata (title, SEO description, keywords).
      */
     updatePageMetadata(pageId: string, request: UpdatePageMetadataRequest) {
-        return this.http.put<UpdatePageResponse>(
-            `${this.baseUrl}/pages/${pageId}/metadata`,
-            request,
-        );
+        return this.api.put<unknown>(`${this.baseUrl}/pages/${pageId}/metadata`, request);
     }
 
     /**
      * Update page layout (rows, columns, blocks).
      */
     updatePageLayout(pageId: string, layout: PageRow[]) {
-        return this.http.put<UpdatePageResponse>(`${this.baseUrl}/pages/${pageId}/layout`, layout);
+        return this.api.put<unknown>(`${this.baseUrl}/pages/${pageId}/layout`, layout);
     }
 
     /**
      * Publish a page.
      */
     publishPage(pageId: string) {
-        return this.http.post<UpdatePageResponse>(`${this.baseUrl}/pages/${pageId}/publish`, {});
+        return this.api.post<unknown>(`${this.baseUrl}/pages/${pageId}/publish`, {});
     }
 
     /**
      * Archive a page.
      */
     archivePage(pageId: string) {
-        return this.http.post<UpdatePageResponse>(`${this.baseUrl}/pages/${pageId}/archive`, {});
+        return this.api.post<unknown>(`${this.baseUrl}/pages/${pageId}/archive`, {});
     }
 }

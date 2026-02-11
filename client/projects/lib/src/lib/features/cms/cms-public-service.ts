@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, InjectionToken, inject } from '@angular/core';
+import { ApiClient } from '../../core/api/api-client';
 
-import { PageDetailResponse } from './dtos';
+import { PageDetail } from './dtos';
 
 export const CMS_PUBLIC_API_BASE_URL = new InjectionToken<string>('CMS_PUBLIC_API_BASE_URL', {
     factory: () => '',
@@ -11,7 +11,7 @@ export const CMS_PUBLIC_API_BASE_URL = new InjectionToken<string>('CMS_PUBLIC_AP
     providedIn: 'root',
 })
 export class CmsPublicService {
-    private readonly http = inject(HttpClient);
+    private readonly api = inject(ApiClient);
     private readonly baseUrl = inject(CMS_PUBLIC_API_BASE_URL);
 
     /**
@@ -19,6 +19,6 @@ export class CmsPublicService {
      * This is the only CMS endpoint available to frontoffice.
      */
     getPageBySlug(slug: string) {
-        return this.http.get<PageDetailResponse>(`${this.baseUrl}/pages/${slug}`);
+        return this.api.get<PageDetail>(`${this.baseUrl}/pages/${slug}`);
     }
 }
