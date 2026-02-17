@@ -18,7 +18,8 @@
       "@template-fullstack-client/raiiaa-kit": ["libs/raiiaa-kit/src/index.ts"],
       "@template-fullstack-client/raiiaa-kit/styles": [
         "libs/raiiaa-kit/src/styles.css"
-      ]
+      ],
+      "@template-fullstack-client/api": ["libs/api/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
