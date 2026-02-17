@@ -1,50 +1,56 @@
 /* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
 /* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "paths": {
-      "lib": [
-        "./dist/lib"
-      ]
+    "compileOnSave": false,
+    "compilerOptions": {
+        "baseUrl": "./",
+        "strict": true,
+        "noImplicitOverride": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "paths": {
+            "lib": ["./projects/lib/src/public-api.ts"],
+            "ui-kit": ["./dist/ui-kit", "./projects/ui-kit/src/public-api.ts"]
+        },
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "ES2022",
+        "module": "preserve"
     },
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "ES2022",
-    "module": "preserve"
-  },
-  "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  },
-  "files": [],
-  "references": [
-    {
-      "path": "./projects/backoffice/tsconfig.app.json"
+    "angularCompilerOptions": {
+        "enableI18nLegacyMessageIdFormat": false,
+        "strictInjectionParameters": true,
+        "strictInputAccessModifiers": true,
+        "strictTemplates": true
     },
-    {
-      "path": "./projects/backoffice/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/frontoffice/tsconfig.app.json"
-    },
-    {
-      "path": "./projects/frontoffice/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/lib/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/lib/tsconfig.spec.json"
-    }
-  ]
+    "files": [],
+    "references": [
+        {
+            "path": "./projects/backoffice/tsconfig.app.json"
+        },
+        {
+            "path": "./projects/backoffice/tsconfig.spec.json"
+        },
+        {
+            "path": "./projects/frontoffice/tsconfig.app.json"
+        },
+        {
+            "path": "./projects/frontoffice/tsconfig.spec.json"
+        },
+        {
+            "path": "./projects/lib/tsconfig.lib.json"
+        },
+        {
+            "path": "./projects/lib/tsconfig.spec.json"
+        },
+        {
+            "path": "./projects/ui-kit/tsconfig.lib.json"
+        },
+        {
+            "path": "./projects/ui-kit/tsconfig.spec.json"
+        }
+    ]
 }

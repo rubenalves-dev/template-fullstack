@@ -2,6 +2,7 @@
  * Public API Surface of lib
  */
 
+// export * from './lib/utils/enums';
 export * from './lib/core/api/api-client';
 export * from './lib/core/api/dtos';
 export * from './lib/core/environment/app-context-service';
@@ -18,3 +19,4 @@ export * from './lib/features/cms/cms-public-service';
 export * from './lib/features/cms/cms-service';
 export * from './lib/features/cms/dtos';
 export * from './lib/lib';
+export * from './lib/utils/objects';
