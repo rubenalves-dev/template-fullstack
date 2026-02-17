@@ -19,7 +19,7 @@ func NewPgxRepository(pool *pgxpool.Pool) domain.Repository {
 }
 
 func (p pxgRepo) GetByID(ctx context.Context, id uuid.UUID) (*domain.Page, error) {
-	query := `SELECT id, title, slug, seo_description, seo_keywords, status, created_at, updated_at FROM pages WHERE id = $1`
+	query := `SELECT id, title, slug, seo_description, seo_keywords, status, created_at, updated_at, is_editable, page_type FROM pages WHERE id = $1`
 	row := p.pool.QueryRow(ctx, query, id)
 
 	var page domain.Page
@@ -43,7 +43,7 @@ func (p pxgRepo) GetBySlug(ctx context.Context, slug string) (*domain.Page, erro
 }
 
 func (p pxgRepo) List(ctx context.Context) ([]domain.Page, error) {
-	query := `SELECT id, title, slug, seo_description, seo_keywords, status, created_at, updated_at FROM pages ORDER BY created_at DESC`
+	query := `SELECT id, title, slug, seo_description, seo_keywords, status, created_at, updated_at, page_type, is_editable FROM pages ORDER BY created_at DESC`
 	rows, err := p.pool.Query(ctx, query)
 	if err != nil {
 		return nil, err
@@ -62,8 +62,8 @@ func (p pxgRepo) List(ctx context.Context) ([]domain.Page, error) {
 }
 
 func (p pxgRepo) Create(ctx context.Context, page *domain.Page) error {
-	query := `INSERT INTO pages (id, title, slug, seo_description, seo_keywords, status) VALUES ($1, $2, $3, $4, $5, $6)`
-	_, err := p.pool.Exec(ctx, query, page.ID, page.Title, page.Slug, page.SEODescription, page.SEOKeywords, page.Status)
+	query := `INSERT INTO pages (id, title, slug, seo_description, seo_keywords, status, page_type, is_editable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
+	_, err := p.pool.Exec(ctx, query, page.ID, page.Title, page.Slug, page.SEODescription, page.SEOKeywords, page.Status, page.PageType, page.IsEditable)
 	return err
 }
 

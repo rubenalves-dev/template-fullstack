@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
@@ -214,6 +215,74 @@ func (r *pgxRepo) GetMenuDefinitions(ctx context.Context) ([]domain.MenuDefiniti
 		defs = append(defs, d)
 	}
 	return defs, nil
+}
+
+func (r *pgxRepo) GetUserByID(ctx context.Context, userID uuid.UUID) (*domain.User, error) {
+	query := `SELECT id, email, password_hash, full_name FROM users WHERE id = $1`
+
+	var user domain.User
+	err := r.pool.QueryRow(ctx, query, userID).Scan(&user.ID, &user.Email, &user.PasswordHash, &user.FullName)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, httputil.ErrNotFound
+		}
+		return nil, fmt.Errorf("auth repo get user by id: %w", err)
+	}
+
+	return &user, nil
+}
+
+func (r *pgxRepo) CreateSession(ctx context.Context, session *domain.Session) error {
+	query := `
+		INSERT INTO auth_sessions (id, user_id, refresh_token_hash, expires_at)
+		VALUES ($1, $2, $3, $4)
+	`
+	_, err := r.pool.Exec(ctx, query, session.ID, session.UserID, session.RefreshTokenHash, session.ExpiresAt)
+	if err != nil {
+		return fmt.Errorf("auth repo create session: %w", err)
+	}
+	return nil
+}
+
+func (r *pgxRepo) GetSessionByID(ctx context.Context, sessionID uuid.UUID) (*domain.Session, error) {
+	query := `
+		SELECT id, user_id, refresh_token_hash, expires_at, created_at, updated_at, revoked_at
+		FROM auth_sessions
+		WHERE id = $1
+	`
+	var session domain.Session
+	err := r.pool.QueryRow(ctx, query, sessionID).Scan(
+		&session.ID,
+		&session.UserID,
+		&session.RefreshTokenHash,
+		&session.ExpiresAt,
+		&session.CreatedAt,
+		&session.UpdatedAt,
+		&session.RevokedAt,
+	)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, httputil.ErrNotFound
+		}
+		return nil, fmt.Errorf("auth repo get session by id: %w", err)
+	}
+	return &session, nil
+}
+
+func (r *pgxRepo) UpdateSessionRefresh(ctx context.Context, sessionID uuid.UUID, refreshTokenHash string, expiresAt time.Time) error {
+	query := `
+		UPDATE auth_sessions
+		SET refresh_token_hash = $2, expires_at = $3, updated_at = now()
+		WHERE id = $1
+	`
+	cmd, err := r.pool.Exec(ctx, query, sessionID, refreshTokenHash, expiresAt)
+	if err != nil {
+		return fmt.Errorf("auth repo update session refresh: %w", err)
+	}
+	if cmd.RowsAffected() == 0 {
+		return httputil.ErrNotFound
+	}
+	return nil
 }
 
 func nullableString(value string) any {

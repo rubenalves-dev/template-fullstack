@@ -25,6 +25,9 @@ bin/
 temp/
 tmp/
 
+*.log
+main
+
 # Backup files
 _bk/
 

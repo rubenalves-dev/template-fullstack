@@ -37,6 +37,11 @@ func AuthMiddleware(jwtSecret string) func(next http.Handler) http.Handler {
 				return
 			}
 
+			if claims.TokenType != domain.TokenTypeAccess {
+				jsonutil.RenderError(w, http.StatusUnauthorized, "UNAUTHORIZED", "Invalid token type")
+				return
+			}
+
 			ctx := context.WithValue(r.Context(), domain.UserClaimsKey, claims)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})

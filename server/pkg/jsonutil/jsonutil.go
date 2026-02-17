@@ -15,6 +15,13 @@ type ErrorDetail struct {
 	Message string `json:"msg"`
 }
 
+func NewError(code, msg string) *ErrorDetail {
+	return &ErrorDetail{
+		Code:    code,
+		Message: msg,
+	}
+}
+
 func RenderJSON(w http.ResponseWriter, status int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)

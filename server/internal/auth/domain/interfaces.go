@@ -2,6 +2,7 @@ package domain
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -9,7 +10,13 @@ import (
 // Repository defines an interface for managing user data storage and retrieval operations in the system.
 type Repository interface {
 	GetUserByEmail(ctx context.Context, email string) (*User, error)
+	GetUserByID(ctx context.Context, userID uuid.UUID) (*User, error)
 	CreateUser(ctx context.Context, user *User) error
+
+	// Sessions
+	CreateSession(ctx context.Context, session *Session) error
+	GetSessionByID(ctx context.Context, sessionID uuid.UUID) (*Session, error)
+	UpdateSessionRefresh(ctx context.Context, sessionID uuid.UUID, refreshTokenHash string, expiresAt time.Time) error
 
 	// RBAC
 	UpsertPermissions(ctx context.Context, permissions []Permission) error
@@ -26,7 +33,9 @@ type Repository interface {
 
 // Service defines an interface for managing user authentication and registration operations in the system.
 type Service interface {
-	Login(ctx context.Context, email, password string) (string, error)
+	Login(ctx context.Context, email, password string) (AuthTokens, error)
+	RefreshTokens(ctx context.Context, refreshToken string) (AuthTokens, error)
+	GetMe(ctx context.Context, userID uuid.UUID) (*User, error)
 	Register(ctx context.Context, user User) error
 
 	// RBAC

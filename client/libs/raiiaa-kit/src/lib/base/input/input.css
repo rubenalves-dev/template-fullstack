@@ -1,0 +1,69 @@
+:host {
+  --input-bg: var(--input, transparent);
+  --input-color: var(--foreground, #000);
+  --input-border: var(--border, transparent);
+  --input-focus-ring: var(--ring, transparent);
+
+  background-color: var(--input-bg);
+  color: var(--input-color);
+  border: 1px solid var(--input-border);
+
+  display: block;
+  padding: 0.5em 1em;
+  border-radius: var(--radius);
+  transition: all 0.2s ease-in-out;
+}
+
+:host.r-input--success {
+  --input-border: var(--primary-400, transparent);
+}
+
+:host.r-input--warning {
+  --input-border: var(--secondary-400, transparent);
+  --input-focus-ring: var(--secondary-400, transparent);
+}
+
+:host.r-input--error {
+  --input-border: var(--destructive, transparent);
+  --input-focus-ring: var(--destructive, transparent);
+  animation: shake 0.3s ease-in-out;
+}
+
+:host.r-input--disabled {
+  --input-bg: var(--muted, #eee);
+  --input-color: var(--muted-foreground, #999);
+  --input-border: var(--base-200, #ddd);
+
+  cursor: not-allowed;
+}
+
+:host.r-input--readonly {
+  --input-bg: var(--base-500, #eee);
+  --input-border: var(--base-200, #ddd);
+  background-color: var(--muted, #eee);
+}
+
+:host:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px
+    color-mix(
+      in oklab,
+      var(--input-focus-ring, var(--ring, #000)) 50%,
+      transparent
+    );
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-5px);
+  }
+  40%,
+  80% {
+    transform: translateX(5px);
+  }
+}
