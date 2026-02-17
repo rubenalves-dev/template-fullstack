@@ -2,7 +2,7 @@
   "name": "raiiaa-kit",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/raiiaa-kit/src",
-  "prefix": "lib",
+  "prefix": "r",
   "projectType": "library",
   "tags": [],
   "targets": {

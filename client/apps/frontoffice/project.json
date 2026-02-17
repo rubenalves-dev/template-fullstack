@@ -19,7 +19,13 @@
             "input": "apps/frontoffice/public"
           }
         ],
-        "styles": ["apps/frontoffice/src/styles.css"]
+        "styles": [
+          "apps/frontoffice/src/styles.css",
+          "libs/raiiaa-kit/src/styles.css"
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/raiiaa-kit/src/styles.css"]
+        }
       },
       "configurations": {
         "production": {

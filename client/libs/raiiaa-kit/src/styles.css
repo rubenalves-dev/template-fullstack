@@ -1,0 +1,7 @@
+@import './styles/variables.css';
+@import './styles/defaults.css';
+@import './styles/typography.css';
+
+body {
+  background-color: black;
+}

@@ -1,0 +1,15 @@
+@if (leftIcons().length > 0) {
+    <span class="icon-wrapper left">
+        <ng-content select="[leftIcon]"></ng-content>
+    </span>
+}
+
+<span class="button-content">
+    <ng-content></ng-content>
+</span>
+
+@if (rightIcons().length > 0) {
+    <span class="icon-wrapper right">
+        <ng-content select="[rightIcon]"></ng-content>
+    </span>
+}

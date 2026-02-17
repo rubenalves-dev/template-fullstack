@@ -1,0 +1,88 @@
+:host {
+    --_bg: var(--primary, transparent);
+    --_color: var(--primary-foreground, #000);
+    --_border: var(--primary, transparent);
+
+    --button-bg: var(--_bg, transparent);
+    --button-color: var(--_color, #000);
+    --button-border: var(--_border, transparent);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+:host:hover {
+    background-color: color-mix(in oklab, var(--_bg) 90%, var(--black, #000));
+}
+
+:host:active {
+    background-color: color-mix(in oklab, var(--_bg) 80%, var(--black, #000));
+}
+
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+/* Themes */
+:host.r-button--primary {
+    --button-bg: var(--primary, transparent);
+    --button-color: var(--primary-foreground, #000);
+    --button-border: var(--primary, transparent);
+}
+
+:host.r-button--secondary {
+    --button-bg: var(--secondary, transparent);
+    --button-color: var(--secondary-foreground, #000);
+    --button-border: var(--secondary, transparent);
+}
+
+:host.r-button--black {
+    --button-bg: var(--black, transparent);
+    --button-color: var(--white, #fff);
+    --button-border: var(--black, transparent);
+}
+
+:host.r-button--white {
+    --button-bg: var(--white, transparent);
+    --button-color: var(--black, #000);
+    --button-border: var(--white, transparent);
+}
+
+:host.r-button--muted {
+    --button-bg: var(--muted, transparent);
+    --button-color: var(--muted-foreground, #000);
+    --button-border: var(--muted, transparent);
+}
+
+:host.r-button--destructive {
+    --button-bg: var(--destructive, transparent);
+    --button-color: var(--white, #fff);
+    --button-border: var(--destructive, transparent);
+}
+
+/* Variants */
+:host.r-button--solid {
+    --_bg: var(--button-bg, transparent);
+    --_color: var(--button-color, #000);
+    --_border: var(--button-border, transparent);
+}
+
+:host.r-button--ghost {
+    --_bg: transparent;
+    --_color: var(--button-color, #000);
+    --_border: transparent;
+}
+
+:host.r-button--outline {
+    --_bg: transparent;
+    --_color: var(--button-color, #000);
+    --_border: var(--button-border, transparent);
+}
