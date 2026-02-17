@@ -1,8 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 
+import { AuthSession } from '../types/schemas';
 import { AUTH_COOKIE_OPTIONS, AuthCookieOptions } from './auth-tokens';
-import { AuthSession } from './dtos';
 
 @Injectable({
   providedIn: 'root',
@@ -28,11 +28,23 @@ export class TokenStore {
       return;
     }
 
-    this.setCookie('access_token', session.accessToken, session.accessExpiresAt);
-    this.setCookie('access_expires_at', session.accessExpiresAt, session.accessExpiresAt);
+    this.setCookie(
+      'access_token',
+      session.accessToken,
+      session.accessExpiresAt,
+    );
+    this.setCookie(
+      'access_expires_at',
+      session.accessExpiresAt,
+      session.accessExpiresAt,
+    );
 
     if (session.refreshToken) {
-      this.setCookie('refresh_token', session.refreshToken, session.refreshExpiresAt);
+      this.setCookie(
+        'refresh_token',
+        session.refreshToken,
+        session.refreshExpiresAt,
+      );
     }
   }
 
@@ -51,7 +63,9 @@ export class TokenStore {
     }
 
     const cookies = document.cookie.split(';');
-    const target = cookies.find((cookie) => cookie.trim().startsWith(`${name}=`));
+    const target = cookies.find((cookie) =>
+      cookie.trim().startsWith(`${name}=`),
+    );
 
     if (!target) {
       return null;
