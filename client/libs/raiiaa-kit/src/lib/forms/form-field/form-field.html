@@ -1,0 +1,29 @@
+<div class="r-form-field" [class.r-form-field--error]="$hasErrors()">
+    @if ($labelName()) {
+        <label class="r-form-field__label" [for]="inputElement()?.ngControl?.name">
+            {{ $labelName() }}
+        </label>
+    }
+
+    <div class="r-form-field__wrapper">
+        <span class="r-form-field__affix r-form-field__affix--left">
+            <ng-content select="[leftIcon]"></ng-content>
+        </span>
+
+        <ng-content></ng-content>
+
+        <span class="r-form-field__affix r-form-field__affix--right">
+            @if (isLoading()) {
+                <r-spinner size="xs" theme="muted"></r-spinner>
+            } @else {
+                <ng-content select="[rightIcon]"></ng-content>
+            }
+        </span>
+    </div>
+
+    @if ($hasErrors()) {
+        <span class="r-form-field__error">{{ $errorMessage() }}</span>
+    } @else if (hint()) {
+        <span class="r-form-field__hint">{{ hint() }}</span>
+    }
+</div>

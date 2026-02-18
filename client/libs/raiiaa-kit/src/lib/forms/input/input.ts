@@ -1,5 +1,14 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+    booleanAttribute,
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    inject,
+    input,
+    model,
+} from '@angular/core';
 import { ValuesOf } from '../../shared/utils/objects';
+import { NgControl } from '@angular/forms';
 
 @Component({
     selector: 'input[r-input], textarea[r-input]',
@@ -15,8 +24,10 @@ export class Input {
     disabled = input(false, { transform: booleanAttribute });
     readonly = input(false, { transform: booleanAttribute });
 
-    status = input<ValuesOf<typeof InputStatus>>('idle');
+    status = model<ValuesOf<typeof InputStatus>>('idle');
     size = input<ValuesOf<typeof InputSize>>('md');
+
+    public ngControl = inject(NgControl, { self: true, optional: true });
 
     protected hostClasses = computed(() => {
         let classes = `r-input r-input--${this.status()} r-input--${this.size()}`;

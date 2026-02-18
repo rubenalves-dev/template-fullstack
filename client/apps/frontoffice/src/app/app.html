@@ -7,6 +7,16 @@
     <input r-input placeholder="Raiiaa Kit" size="lg" status="warning"/>
     <r-badge [pill]="true">Hello</r-badge>
     <r-spinner tooltip="A carregar..." theme="destructive"></r-spinner>
+
+    <form [formGroup]="form">
+        <r-form-field hint="Digite seu email">
+            <input r-input formControlName="email"/>
+        </r-form-field>
+
+        <button r-button type="submit" theme="primary" variant="solid">
+            Submit
+        </button>
+    </form>
 </section>
 
 <router-outlet></router-outlet>
