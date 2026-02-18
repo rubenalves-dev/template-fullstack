@@ -1,0 +1,75 @@
+:host {
+    --spinner-size: 1.5rem;
+    --spinner-color: var(--primary);
+
+    display: inline-block;
+    width: var(--spinner-size);
+    height: var(--spinner-size);
+    color: var(--spinner-color);
+}
+
+:host.r-spinner--primary {
+    --spinner-color: var(--primary);
+}
+
+:host.r-spinner--secondary {
+    --spinner-color: var(--secondary);
+}
+
+:host.r-spinner--muted {
+    --spinner-color: var(--muted);
+}
+
+:host.r-spinner--destructive {
+    --spinner-color: var(--destructive);
+}
+
+:host.r-spinner--black {
+    --spinner-color: var(--black);
+}
+
+:host.r-spinner--white {
+    --spinner-color: var(--white);
+}
+
+:host.r-spinner--xs {
+    --spinner-size: 1.25rem;
+}
+
+:host.r-spinner--sm {
+    --spinner-size: 1rem;
+}
+
+:host.r-spinner--md {
+    --spinner-size: 1.5rem;
+}
+
+:host.r-spinner--lg {
+    --spinner-size: 2rem;
+}
+
+svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    animation: rotate 0.8s linear infinite;
+}
+
+.track {
+    opacity: 0.2;
+}
+
+.head {
+    /* dasharray creates the 'gap' in the circle */
+    stroke-dasharray: 60;
+    stroke-dashoffset: 40;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

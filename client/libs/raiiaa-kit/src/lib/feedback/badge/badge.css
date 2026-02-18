@@ -1,0 +1,81 @@
+:host {
+    --_bg: var(--badge-bg, #000);
+    --_color: var(--badge-color, #fff);
+    --_border: var(--badge-border, transparent);
+
+    --badge-bg: var(--primary, #000);
+    --badge-color: var(--primary-foreground, #fff);
+    --badge-border: var(--primary, transparent);
+
+    background-color: var(--_bg);
+    color: var(--_color);
+    border: 1px solid var(--_border);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .125em .5em;
+    font-size: var(--font-size-xs, 0.75rem);
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    border-radius: var(--radius-sm);
+}
+
+:host.r-badge--pill {
+    border-radius: var(--radius-full);
+}
+
+:host.r-badge--primary {
+    --badge-bg: var(--primary, #000);
+    --badge-color: var(--primary-foreground, #fff);
+    --badge-border: var(--primary, transparent);
+}
+
+:host.r-badge--secondary {
+    --badge-bg: var(--secondary, #000);
+    --badge-color: var(--secondary-foreground, #fff);
+    --badge-border: var(--secondary, transparent);
+}
+
+:host.r-badge--muted {
+    --badge-bg: var(--muted, #000);
+    --badge-color: var(--muted-foreground, #fff);
+    --badge-border: var(--muted, transparent);
+}
+
+:host.r-badge--destructive {
+    --badge-bg: var(--destructive, #000);
+    --badge-color: var(--white, #fff);
+    --badge-border: var(--destructive, transparent);
+}
+
+:host.r-badge--white {
+    --badge-bg: var(--white, #fff);
+    --badge-color: var(--black, #000);
+    --badge-border: var(--white, transparent);
+}
+
+:host.r-badge--black {
+    --badge-bg: var(--black, #000);
+    --badge-color: var(--white, #fff);
+    --badge-border: var(--black, transparent);
+}
+
+:host.r-badge--solid {
+    --_bg: var(--badge-bg, #000);
+    --_color: var(--badge-color, #fff);
+    --_border: var(--badge-border, transparent);
+}
+
+:host.r-badge--outline {
+    --_bg: transparent;
+    --_color: var(--badge-bg, #000);
+    --_border: var(--badge-bg, transparent);
+}
+
+:host.r-badge--ghost {
+    --_bg: transparent;
+    --_color: var(--badge-color, #000);
+    --_border: transparent;
+}
