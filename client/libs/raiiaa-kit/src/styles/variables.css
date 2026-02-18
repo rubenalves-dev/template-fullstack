@@ -53,7 +53,7 @@
     --popover-foreground: var(--black);
     --primary: var(--primary-400);
     --primary-foreground: var(--black);
-    --secondary: var(--secondary-400, var(--color-primary));
+    --secondary: var(--secondary-400, var(--primary));
     --secondary-foreground: var(--black);
     --muted: var(--base-100);
     --muted-foreground: var(--base-500);
@@ -68,6 +68,7 @@
     --radius-md: calc(var(--radius));
     --radius-lg: calc(var(--radius) + 4px);
     --radius-xl: calc(var(--radius) + 8px);
+    --radius-full: 9999px;
     --font-size: clamp(1rem, 1vw, 1.125rem);
     --font-size-body: var(--font-size);
     --font-size-xs: calc(var(--font-size) * 0.75);

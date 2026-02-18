@@ -1,16 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RaiiaaKit } from './raiiaa-kit';
 
-describe('RaiiaaKit', () => {
-  let component: RaiiaaKit;
-  let fixture: ComponentFixture<RaiiaaKit>;
+import { Spinner } from './spinner';
+
+describe('Spinner', () => {
+  let component: Spinner;
+  let fixture: ComponentFixture<Spinner>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RaiiaaKit],
-    }).compileComponents();
+      imports: [Spinner]
+    })
+    .compileComponents();
 
-    fixture = TestBed.createComponent(RaiiaaKit);
+    fixture = TestBed.createComponent(Spinner);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
