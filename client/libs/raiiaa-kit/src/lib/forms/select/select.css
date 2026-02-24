@@ -1,0 +1,90 @@
+.r-combobox {
+    --r-combobox-bg: color-mix(in oklab, var(--primary) 5%, transparent);
+    --r-combobox-border: color-mix(in oklab, var(--primary) 80%, transparent);
+    --r-combobox-text: var(--primary);
+    --r-combobox-radius: 0.5rem;
+
+    --_bg: var(--r-combobox-bg);
+    --_border: var(--r-combobox-border);
+    --_text: var(--r-combobox-text);
+
+    display: inline-flex;
+    width: 100%;
+}
+
+.r-combobox__control {
+    display: flex;
+    position: relative;
+    align-items: center;
+    width: 100%;
+    min-height: 2.5rem;
+    background-color: var(--_bg);
+    border: 1px solid var(--_border);
+    border-radius: var(--r-combobox-radius);
+    color: var(--_text);
+    padding: 0 1rem;
+    transition: all 0.2s ease;
+}
+
+.r-combobox__control:hover {
+    --_bg: color-mix(in oklab, var(--primary) 10%, transparent);
+}
+
+.r-combobox__input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+}
+
+.r-combobox__input:disabled {
+    cursor: not-allowed;
+}
+
+.r-combobox:has(.r-combobox__input:focus-visible) .r-combobox__control {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.r-combobox__selected-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+
+.r-combobox__arrow {
+    margin-left: auto;
+    transition: transform 0.2s ease;
+}
+
+.r-combobox:has(.r-combobox__input[aria-expanded="true"]) .r-combobox__arrow {
+    transform: rotate(180deg);
+}
+
+/* Popup and Options */
+.r-combobox__popup {
+    background: var(--secondary);
+    border-radius: var(--r-combobox-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 4px;
+    padding: 0.25rem;
+}
+
+.r-combobox__option {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.r-combobox__option[aria-selected="true"] {
+    background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+    color: var(--primary);
+}
+
+.r-combobox__option[data-active="true"] {
+    background-color: color-mix(in srgb, var(--primary) 5%, transparent);
+}

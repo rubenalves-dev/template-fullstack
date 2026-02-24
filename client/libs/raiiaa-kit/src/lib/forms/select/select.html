@@ -1,0 +1,41 @@
+<div ngCombobox readonly class="r-combobox">
+    <div #origin class="r-combobox__control">
+        <span class="r-combobox__selected-container">
+          @if (selectedItem()) {
+              <ng-container
+                  *ngTemplateOutlet="selectedTemplate() ||
+                    optionTemplate() ||
+                    defaultTemplate;
+                    context: {$implicit: selectedItem()}"
+              ></ng-container>
+          } @else {
+              <span class="r-combobox__placeholder">{{ placeholder() }}</span>
+          }
+        </span>
+        <input ngComboboxInput class="r-combobox__input" [attr.aria-label]="placeholder()" [disabled]="disabled()"/>
+        <span class="r-combobox__arrow">expand_more</span>
+    </div>
+
+    <ng-template ngComboboxPopupContainer>
+        <!--            [cdkConnectedOverlay]="{origin, usePopover: 'inline', matchWidth: true}"-->
+        <ng-template [cdkConnectedOverlay]="{origin, matchWidth: true}" [cdkConnectedOverlayOpen]="true">
+            <div class="r-combobox__popup">
+                <div ngListbox class="r-combobox__listbox">
+                    @for (item of items(); track item.value) {
+                        <div ngOption [value]="item.value" [label]="item.text" class="r-combobox__option">
+                            <ng-container
+                                *ngTemplateOutlet="optionTemplate() ||
+                                defaultTemplate;
+                                context: { $implicit: item}">
+                            </ng-container>
+                        </div>
+                    }
+                </div>
+            </div>
+        </ng-template>
+    </ng-template>
+</div>
+
+<ng-template #defaultTemplate let-item>
+    <span class="r-combobox__default-text">{{ item.text }}</span>
+</ng-template>

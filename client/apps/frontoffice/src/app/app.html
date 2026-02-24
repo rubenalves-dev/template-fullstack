@@ -17,6 +17,14 @@
             Submit
         </button>
     </form>
+
+    <r-select [items]="selectList">
+        <ng-template #optionTemplate let-item>
+            <span>{{ item.text }}</span>
+        </ng-template>
+    </r-select>
+
+    <p-button label="Check"/>
 </section>
 
 <router-outlet></router-outlet>

@@ -54,7 +54,7 @@ func main() {
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
 
-	cors := cors.New(cors.Options{
+	corsPtr := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"}, // Adjust as needed
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
@@ -62,8 +62,9 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	})
+	//corsPtr := cors.AllowAll()
 
-	router.Use(cors.Handler)
+	router.Use(corsPtr.Handler)
 
 	router.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		jsonutil.RenderJSON(w, http.StatusOK, map[string]string{"status": "OK"})
@@ -91,7 +92,7 @@ func main() {
 
 	// Graceful Shutdown
 	go func() {
-		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		if err := server.ListenAndServeTLS("cert.pem", "key.pem"); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			logger.Error("server failed", "error", err)
 			os.Exit(1)
 		}
