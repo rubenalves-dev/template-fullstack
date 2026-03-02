@@ -1,0 +1,96 @@
+/* Layout Container: Centers the card perfectly on the screen */
+.auth-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+/* Card Structure: Sets a readable width and internal spacing */
+.auth-card {
+    width: 100%;
+    max-width: 28rem; /* Keeps the form from getting too wide on desktop */
+}
+
+/* Header: Centers the branding and adds separation */
+.auth-card__header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-card__brand-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.auth-card__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.auth-card__subtitle {
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    opacity: 0.7;
+}
+
+/* Form Spacing: Uses Flexbox for consistent vertical gaps */
+.auth-card__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    & > *:last-child {
+        margin-top: 2rem; /* Extra space before the submit button */
+    }
+}
+
+.auth-card__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.auth-card__label {
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* Input Consistency: Ensures PrimeNG components fill the width */
+.auth-card__input-container,
+.auth-card__input,
+.auth-card__password-host ::ng-deep .p-password,
+.auth-card__password-host ::ng-deep input {
+    width: 100% !important;
+}
+
+/* Options & Actions: Alignment for the checkbox and submit button */
+.auth-card__options {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.auth-card__checkbox-label {
+    margin-left: 0.5rem;
+}
+
+.auth-card__button ::ng-deep button {
+    width: 100%;
+    padding: 0.75rem;
+    justify-content: center;
+}
+
+/* Footer: Subtle and centered */
+.auth-card__footer {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.auth-card__disclaimer {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    opacity: 0.6;
+}
