@@ -9,7 +9,7 @@ export interface Page {
     title: string;
     slug: string;
     seo_description: string | null;
-    seo_keywords: string | null;
+    seo_keywords: string[] | null;
     status: PageStatus;
     created_at: string;
     updated_at: string;

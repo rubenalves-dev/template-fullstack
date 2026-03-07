@@ -13,6 +13,7 @@ import {
     AUTH_COOKIE_OPTIONS,
     AUTH_REFRESH_BUFFER_MS,
     AUTHZ_API_BASE_URL,
+    CMS_API_BASE_URL,
 } from '@template-fullstack-client/api';
 import { providePrimeNG } from 'primeng/config';
 import { appRoutes } from './app.routes';
@@ -22,6 +23,7 @@ import { SessionService } from './features/auth/data-access/session-service';
 
 const authApiBaseUrl = 'https://localhost:8080';
 const authzApiBaseUrl = 'https://localhost:8080';
+const apiBaseUrl = 'https://localhost:8080';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -58,6 +60,10 @@ export const appConfig: ApplicationConfig = {
         {
             provide: AUTH_REFRESH_BUFFER_MS,
             useValue: 60_000,
+        },
+        {
+            provide: CMS_API_BASE_URL,
+            useValue: apiBaseUrl,
         },
         provideAppInitializer(() => {
             const sessionService = inject(SessionService);

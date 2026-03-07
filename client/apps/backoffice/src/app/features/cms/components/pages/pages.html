@@ -1,0 +1,33 @@
+<p-table [value]="pages()">
+    <ng-template #header>
+        <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th><!-- ACTIONS --></th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-page>
+        <tr>
+            <td>{{ page.title }}</td>
+            <td>{{ page.slug }}</td>
+            <td>{{ page.description }}</td>
+            <td>{{ page.status }}</td>
+            <td>
+                <span>
+                    <p-button
+                        icon="pi pi-pencil"
+                        text
+                        (click)="editPage(page)"
+                    ></p-button>
+                    <p-button
+                        icon="pi pi-trash"
+                        text
+                        (click)="deletePage(page)"
+                    ></p-button>
+                </span>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

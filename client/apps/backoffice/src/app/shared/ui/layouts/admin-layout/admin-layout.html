@@ -1,7 +1,43 @@
-<nav></nav>
+<div class="admin-layout">
+    <header class="admin-layout__header">
+        <div class="admin-layout__brand">
+            <span class="admin-layout__brand-mark">RAIIAA</span>
+            <span class="admin-layout__brand-divider"></span>
+            <span class="admin-layout__brand-context">Backoffice</span>
+        </div>
 
-<header></header>
+        <div class="admin-layout__actions">
+            <p-button
+                [text]="true"
+                [rounded]="true"
+                icon="pi pi-ellipsis-v"
+                aria-label="Open user menu"
+                (onClick)="optionsMenu.toggle($event)"
+            ></p-button>
 
-<main>
-    <router-outlet></router-outlet>
-</main>
+            <p-avatar
+                icon="pi pi-user"
+                shape="circle"
+                class="admin-layout__avatar"
+            ></p-avatar>
+
+            <p-menu
+                #optionsMenu
+                [popup]="true"
+                [model]="optionsItems()"
+            ></p-menu>
+        </div>
+    </header>
+
+    <aside class="admin-layout__sidebar">
+        <p-panel-menu
+            [model]="menuItems()"
+            class="admin-layout__menu"
+        ></p-panel-menu>
+    </aside>
+
+    <main class="admin-layout__content">
+        <p-breadcrumb [model]="breadcrumbItems()"></p-breadcrumb>
+        <router-outlet></router-outlet>
+    </main>
+</div>

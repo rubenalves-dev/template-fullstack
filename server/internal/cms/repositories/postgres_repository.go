@@ -52,7 +52,7 @@ func (p pxgRepo) List(ctx context.Context) ([]domain.Page, error) {
 	var pages []domain.Page
 	for rows.Next() {
 		var page domain.Page
-		err := rows.Scan(&page.ID, &page.Title, &page.Slug, &page.SEODescription, &page.SEOKeywords, &page.Status, &page.CreatedAt, &page.UpdatedAt)
+		err := rows.Scan(&page.ID, &page.Title, &page.Slug, &page.SEODescription, &page.SEOKeywords, &page.Status, &page.CreatedAt, &page.UpdatedAt, &page.PageType, &page.IsEditable)
 		if err != nil {
 			return nil, err
 		}
