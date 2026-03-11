@@ -128,7 +128,7 @@ export class PageForm {
                 keywords: this.form.value.seo_keywords ?? [],
             })
             .subscribe({
-                next: (res) => {
+                next: () => {
                     this.rUpdate.emit(this.form.value as Page);
                     this.messageService.add({
                         severity: 'success',
@@ -150,7 +150,7 @@ export class PageForm {
     deleteRequest(id: string) {
         console.log('Deleting page:', id);
         this.cmsService.deletePage(id).subscribe({
-            next: (res) => {
+            next: () => {
                 this.rChange.emit(this.form.value as Page);
                 this.messageService.add({
                     severity: 'success',
