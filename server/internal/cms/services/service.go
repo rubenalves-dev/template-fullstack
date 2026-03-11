@@ -67,6 +67,24 @@ func (s service) PublishPage(ctx context.Context, id uuid.UUID) error {
 	return s.nc.Publish(events.CmsPagePublished, eventBytes)
 }
 
+func (s service) DeletePage(ctx context.Context, id uuid.UUID) error {
+	page, err := s.repo.GetByID(ctx, id)
+	if err != nil {
+		return err
+	}
+	err = s.repo.Delete(ctx, page.ID)
+	if err != nil {
+		return err
+	}
+
+	event := events.CmsPageDeletedData{
+		PageID: page.ID,
+		Title:  page.Title,
+	}
+	eventBytes, _ := json.Marshal(event)
+	return s.nc.Publish(events.CmsPageDeleted, eventBytes)
+}
+
 func (s service) ArchivePage(ctx context.Context, id uuid.UUID) error {
 	page, err := s.repo.GetByID(ctx, id)
 	if err != nil {

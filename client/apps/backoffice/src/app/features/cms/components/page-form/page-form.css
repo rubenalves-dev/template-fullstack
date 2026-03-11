@@ -1,0 +1,26 @@
+::ng-deep .p-drawer.p-drawer-right {
+    width: min(30rem, 100%);
+}
+
+::ng-deep .p-drawer-content {
+    padding: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+
+    label {
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    ::ng-deep .p-message {
+        margin-top: 0.25rem;
+    }
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}

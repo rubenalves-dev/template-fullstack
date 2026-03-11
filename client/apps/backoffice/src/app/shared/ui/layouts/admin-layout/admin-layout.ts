@@ -1,13 +1,21 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { ActivatedRoute, isActive, PRIMARY_OUTLET, Router, RouterOutlet, UrlSegment } from '@angular/router';
+import {
+    ActivatedRoute,
+    isActive,
+    PRIMARY_OUTLET,
+    Router,
+    RouterOutlet,
+    UrlSegment,
+} from '@angular/router';
 import { Menu } from '@template-fullstack-client/api';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
+import { Breadcrumb } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { PanelMenuModule } from 'primeng/panelmenu';
+import { Toast } from 'primeng/toast';
 import { SessionService } from '../../../../features/auth/data-access/session-service';
-import { Breadcrumb } from 'primeng/breadcrumb';
 
 @Component({
     selector: 'app-admin-layout',
@@ -18,7 +26,9 @@ import { Breadcrumb } from 'primeng/breadcrumb';
         AvatarModule,
         ButtonModule,
         Breadcrumb,
+        Toast,
     ],
+    providers: [MessageService],
     templateUrl: './admin-layout.html',
     styleUrl: './admin-layout.css',
 })

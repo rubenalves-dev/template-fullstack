@@ -31,6 +31,7 @@ export const appConfig: ApplicationConfig = {
             theme: {
                 preset: Aura,
             },
+            // unstyled: true,
         }),
         provideBrowserGlobalErrorListeners(),
         provideRouter(appRoutes),

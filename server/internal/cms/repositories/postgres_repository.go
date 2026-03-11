@@ -23,7 +23,7 @@ func (p pxgRepo) GetByID(ctx context.Context, id uuid.UUID) (*domain.Page, error
 	row := p.pool.QueryRow(ctx, query, id)
 
 	var page domain.Page
-	err := row.Scan(&page.ID, &page.Title, &page.Slug, &page.SEODescription, &page.SEOKeywords, &page.Status, &page.CreatedAt, &page.UpdatedAt)
+	err := row.Scan(&page.ID, &page.Title, &page.Slug, &page.SEODescription, &page.SEOKeywords, &page.Status, &page.CreatedAt, &page.UpdatedAt, &page.IsEditable, &page.PageType)
 	if err != nil {
 		return nil, err
 	}

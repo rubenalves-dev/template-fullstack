@@ -27,6 +27,7 @@ type Service interface {
 	ListPages(ctx context.Context) ([]Page, error)
 	CreateDraft(ctx context.Context, title string) error
 	PublishPage(ctx context.Context, id uuid.UUID) error
+	DeletePage(ctx context.Context, id uuid.UUID) error
 	ArchivePage(ctx context.Context, id uuid.UUID) error
 	RegisterStaticPage(ctx context.Context, req RegisterStaticPageRequest) error
 

@@ -24,6 +24,7 @@ func RegisterHTTPHandlers(r chi.Router, svc domain.Service) {
 		r.Post("/", h.CreateDraft)
 		r.Post("/register", h.RegisterPage)
 		r.Get("/{slug}", h.GetBySlug)
+		r.Delete("/{id}", h.Delete)
 		r.Put("/{id}/metadata", h.UpdateMetadata)
 		r.Put("/{id}/layout", h.UpdateLayout)
 		r.Post("/{id}/publish", h.Publish)
@@ -149,6 +150,20 @@ func (h *CMSHandler) Publish(w http.ResponseWriter, r *http.Request) {
 	}
 
 	jsonutil.RenderJSON(w, http.StatusOK, map[string]string{"message": "Page published successfully"})
+}
+
+func (h *CMSHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := uuid.Parse(idStr)
+	if err != nil {
+		jsonutil.RenderError(w, http.StatusBadRequest, "INVALID_REQUEST", "Invalid page ID")
+	}
+
+	if err := h.svc.DeletePage(r.Context(), id); err != nil {
+		jsonutil.RenderError(w, http.StatusInternalServerError, "INTERNAL_ERROR", err.Error())
+	}
+
+	jsonutil.RenderJSON(w, http.StatusOK, map[string]string{"message": "Page deleted successfully"})
 }
 
 func (h *CMSHandler) Archive(w http.ResponseWriter, r *http.Request) {

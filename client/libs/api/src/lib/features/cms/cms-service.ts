@@ -89,17 +89,24 @@ export class CmsService {
      * Publish a page.
      */
     publishPage(pageId: string) {
-        return this.api.post<unknown>(
+        return this.api.post<void>(
             `${this.baseUrl}/pages/${pageId}/publish`,
             {},
         );
     }
 
     /**
+     * Delete a page
+     */
+    deletePage(pageId: string) {
+        return this.api.delete<void>(`${this.baseUrl}/pages/${pageId}`);
+    }
+
+    /**
      * Archive a page.
      */
     archivePage(pageId: string) {
-        return this.api.post<unknown>(
+        return this.api.post<void>(
             `${this.baseUrl}/pages/${pageId}/archive`,
             {},
         );

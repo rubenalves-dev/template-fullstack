@@ -1,3 +1,10 @@
+<app-page-form (rChange)="refreshTable()" #form></app-page-form>
+
+<p-button (onClick)="form.openNew()">
+    <i class="pi pi-plus"></i>
+    Add
+</p-button>
+
 <p-table [value]="pages()">
     <ng-template #header>
         <tr>
@@ -12,20 +19,14 @@
         <tr>
             <td>{{ page.title }}</td>
             <td>{{ page.slug }}</td>
-            <td>{{ page.description }}</td>
-            <td>{{ page.status }}</td>
+            <td>{{ page.seo_description }}</td>
+            <td>
+                <p-tag [severity]="getPageStatusSeverity(page.status)">{{ page.status }}</p-tag>
+            </td>
             <td>
                 <span>
-                    <p-button
-                        icon="pi pi-pencil"
-                        text
-                        (click)="editPage(page)"
-                    ></p-button>
-                    <p-button
-                        icon="pi pi-trash"
-                        text
-                        (click)="deletePage(page)"
-                    ></p-button>
+                    <p-button icon="pi pi-pencil" text (click)="form.openEdit(page?.slug)"></p-button>
+                    <p-button icon="pi pi-trash" text (onClick)="form.deleteRequest(page?.id)"></p-button>
                 </span>
             </td>
         </tr>

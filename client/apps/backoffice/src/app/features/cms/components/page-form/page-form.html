@@ -1,0 +1,54 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <p-drawer header="Page" [(visible)]="visible" position="right" class="drawer">
+        <div class="drawer__content">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input pInputText type="text" fluid formControlName="title" />
+            </div>
+            <div class="form-group">
+                <label for="slug">Slug</label>
+                <input pInputText type="text" fluid formControlName="slug" />
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <p-select
+                    fluid
+                    readonly
+                    [disabled]="true"
+                    [options]="['draft', 'archived', 'published']"
+                    formControlName="status"
+                ></p-select>
+            </div>
+            <div class="form-group">
+                <label for="seo_description">SEO Description</label>
+                <textarea pTextarea fluid formControlName="seo_description"></textarea>
+
+                @if (form.get('seo_description')?.invalid && form.get('seo_description')?.touched) {
+                    <p-message severity="error" variant="simple">
+                        SEO Description must be between 10 and 160 characters
+                    </p-message>
+                }
+            </div>
+            <div class="form-group">
+                <label for="seo_keywords">SEO Keywords</label>
+                <p-auto-complete
+                    formControlName="seo_keywords"
+                    fluid
+                    [multiple]="true"
+                    [typeahead]="false"
+                    addOnBlur
+                    addOnTab
+                    separator=","
+                ></p-auto-complete>
+            </div>
+        </div>
+
+        <ng-template #footer>
+            <div class="form-actions">
+                <button pButton type="button" severity="secondary" (click)="closeDrawer()">Cancel</button>
+                <button pButton type="button" severity="info">Edit Layout</button>
+                <button pButton type="submit">Save</button>
+            </div>
+        </ng-template>
+    </p-drawer>
+</form>
