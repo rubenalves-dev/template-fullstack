@@ -1,1 +1,177 @@
-<p>page-layout works!</p>
+<div class="layout-editor">
+    <header class="layout-editor__header">
+        <div class="layout-editor__title">
+            <p-button
+                icon="pi pi-bars"
+                [text]="true"
+                severity="secondary"
+                (onClick)="isComponentsVisible.set(!isComponentsVisible())"
+                tooltipPosition="bottom"
+                pTooltip="Toggle Components"
+            />
+            <h1 class="layout-editor__page-name">{{ page()?.title }}</h1>
+        </div>
+        <div class="layout-editor__actions">
+            <p-button
+                label="Add Row"
+                icon="pi pi-plus"
+                (onClick)="addRow()"
+                severity="secondary"
+                size="small"
+                class="mr-2"
+            />
+            <p-button label="Save Layout" icon="pi pi-save" (onClick)="saveLayout()" severity="primary" size="small" />
+        </div>
+    </header>
+
+    <div class="layout-editor__main">
+        <!-- Sidebar Left: Component Picker -->
+        <p-drawer
+            [(visible)]="isComponentsVisible"
+            [modal]="false"
+            [dismissible]="false"
+            styleClass="layout-editor__drawer layout-editor__drawer--left"
+            header="Components"
+        >
+            <div class="component-picker">
+                @for (comp of availableComponents(); track comp.type) {
+                    <div class="component-picker__item" (click)="addBlockToColumn(comp.type)">
+                        <i [class]="comp.icon + ' component-picker__icon'"></i>
+                        <span class="component-picker__label">{{ comp.label }}</span>
+                    </div>
+                }
+            </div>
+            <p *ngIf="activeColumn()" class="mt-4 text-xs italic text-center text-surface-500">
+                Pick a component to add it to the selected column.
+            </p>
+        </p-drawer>
+
+        <!-- Main Canvas -->
+        <main class="layout-editor__canvas">
+            <p-toast />
+
+            <div class="layout-canvas">
+                @if (!page()?.rows || page()?.rows?.length === 0) {
+                    <div class="layout-canvas__empty">
+                        <i class="pi pi-plus-circle layout-canvas__empty-icon"></i>
+                        <p>Start by adding a row to your page</p>
+                        <p-button label="Add Row" icon="pi pi-plus" (onClick)="addRow()" />
+                    </div>
+                }
+
+                @for (row of page()?.rows; track row.sort_order; let rowIndex = $index) {
+                    <div class="layout-canvas__row">
+                        <div class="layout-canvas__row-actions">
+                            <span class="layout-canvas__row-label">Row #{{ rowIndex + 1 }}</span>
+                            <div class="layout-canvas__row-buttons">
+                                <p-button
+                                    label="Add Column"
+                                    icon="pi pi-plus"
+                                    [text]="true"
+                                    size="small"
+                                    (onClick)="addColumn(row)"
+                                />
+                                <p-button
+                                    icon="pi pi-trash"
+                                    [text]="true"
+                                    severity="danger"
+                                    size="small"
+                                    (onClick)="deleteRow(rowIndex)"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="layout-canvas__row-content">
+                            @for (col of row.columns; track $index; let colIndex = $index) {
+                                <div class="layout-canvas__column" [style.width]="col.width_md || '100%'">
+                                    <div class="layout-canvas__column-header">
+                                        <p-button
+                                            icon="pi pi-times"
+                                            [text]="true"
+                                            severity="secondary"
+                                            size="small"
+                                            (onClick)="deleteColumn(row, colIndex)"
+                                        />
+                                    </div>
+                                    <div
+                                        class="layout-canvas__column-content"
+                                        [class.rows-canvas__column-content--active]="activeColumn() === col"
+                                    >
+                                        @for (block of col.blocks; track block; let blockIndex = $index) {
+                                            <div
+                                                class="layout-canvas__block"
+                                                [class.rows-canvas__block--selected]="selectedBlock() === block"
+                                                (click)="selectBlock(block)"
+                                            >
+                                                <div class="layout-canvas__block-header">
+                                                    <span class="layout-canvas__block-type">{{
+                                                        block.type | titlecase
+                                                    }}</span>
+                                                    <p-button
+                                                        icon="pi pi-trash"
+                                                        [text]="true"
+                                                        severity="danger"
+                                                        size="small"
+                                                        (onClick)="
+                                                            deleteBlock(col, blockIndex); $event.stopPropagation()
+                                                        "
+                                                    />
+                                                </div>
+                                                <div class="layout-canvas__block-preview">
+                                                    <i class="pi pi-box"></i>
+                                                    <span>Component Preview</span>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <div class="layout-canvas__add-block" (click)="prepareAddBlock(col)">
+                                            <i class="pi pi-plus"></i>
+                                            <span>Add block here</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </main>
+
+        <!-- Sidebar Right: Properties Editor -->
+        <p-drawer
+            [(visible)]="isPropertiesVisible"
+            position="right"
+            [modal]="false"
+            [dismissible]="false"
+            styleClass="layout-editor__drawer layout-editor__drawer--right"
+            header="Properties"
+        >
+            @if (selectedBlock()) {
+                <div class="property-editor">
+                    <div class="property-editor__header">
+                        <h3 class="property-editor__title">{{ selectedBlock().type | titlecase }} Settings</h3>
+                    </div>
+
+                    <div class="property-editor__form">
+                        <div class="property-editor__field">
+                            <label class="property-editor__label">CSS Class</label>
+                            <input
+                                type="text"
+                                pInputText
+                                [(ngModel)]="selectedBlock().css_class"
+                                class="property-editor__input"
+                            />
+                        </div>
+
+                        <p class="property-editor__info">Configure the specific properties of this component below.</p>
+                    </div>
+                </div>
+            } @else {
+                <div class="property-editor__empty">
+                    <i class="pi pi-info-circle"></i>
+                    <p>Select a block to edit its properties</p>
+                </div>
+            }
+        </p-drawer>
+    </div>
+</div>

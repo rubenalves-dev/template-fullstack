@@ -5,6 +5,7 @@ import {
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CmsService, Page, PageStatus } from '@template-fullstack-client/api';
 import { MessageService } from 'primeng/api';
 import { AutoComplete } from 'primeng/autocomplete';
@@ -33,6 +34,7 @@ import { Textarea } from 'primeng/textarea';
 export class PageForm {
     private readonly cmsService = inject(CmsService);
     private readonly messageService = inject(MessageService);
+    private readonly router = inject(Router);
 
     visible = model<boolean>(false);
     rUpdate = output<Page>();
@@ -91,6 +93,13 @@ export class PageForm {
         } else {
             this.createRequest();
         }
+    }
+
+    async editLayout() {
+        await this.router.navigate([
+            '/admin/page/layout',
+            this.form.value.slug,
+        ]);
     }
 
     createRequest() {

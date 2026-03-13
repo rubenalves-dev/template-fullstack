@@ -1,8 +1,8 @@
 import { Route } from '@angular/router';
 import { authGuard } from './features/auth/data-access/auth-guard';
-import { AdminLayout } from './shared/ui/layouts/admin-layout/admin-layout';
-import { HOME_ROUTES } from './features/home/home.routes';
 import { CMS_ROUTES } from './features/cms/cms.routes';
+import { HOME_ROUTES } from './features/home/home.routes';
+import { AdminLayout } from './shared/ui/layouts/admin-layout/admin-layout';
 
 export const appRoutes: Route[] = [
     {
@@ -16,6 +16,13 @@ export const appRoutes: Route[] = [
                     ),
             },
         ],
+    },
+    {
+        path: 'admin/page/layout/:slug',
+        loadComponent: () =>
+            import('./features/cms/components/page-layout/page-layout').then(
+                (m) => m.PageLayout,
+            ),
     },
     {
         path: 'admin',

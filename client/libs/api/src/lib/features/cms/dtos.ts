@@ -16,7 +16,7 @@ export interface Page {
 }
 
 export interface PageDetail extends Page {
-    layout: PageRow[];
+    rows: PageRow[];
 }
 
 // Requests
